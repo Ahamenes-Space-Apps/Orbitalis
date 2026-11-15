@@ -56,10 +56,16 @@ interface SkyViewProps {
   track?: TrackPoint[] | null;
 }
 
-const CANDIDATE_COLOR = '#feb832';
-const STATIC_COLOR = '#9aa3b8';
-const KNOWN_COLOR = '#7b8499';
-const HYPOTHESIS_COLOR = '#6cb6ff';
+const CANDIDATE_COLOR = '#39b8c4';
+const STATIC_COLOR = '#82929b';
+const KNOWN_COLOR = '#b2bec6';
+const HYPOTHESIS_COLOR = '#e76f51';
+
+interface MarkerGroup {
+  id: string;
+  markers: SkyMarker[];
+  pixel: { x: number; y: number };
+}
 
 export function SkyView({
   field,
@@ -109,7 +115,6 @@ export function SkyView({
   const height = grid.height;
   const scale = grid.pixel_scale_arcsec;
   const currentFrame = frame ?? frames[0] ?? null;
-  const [expandedGroupId, setExpandedGroupId] = useState<string | null>(null);
 
   const toPixel = useCallback(
     (position: SkyPos): { x: number; y: number } => {
@@ -144,8 +149,8 @@ export function SkyView({
     return candidates.map((candidate) => {
       return {
         candidate,
-        // CandidateSummary.position is the stored reference position. Motion
-        // is never projected into a new frame here; tracks use stored points.
+        // Candidate markers are always anchored to the stored reference position.
+        // Movement is shown only by the selected candidate's stored per-frame track.
         position: candidate.position,
         selected: candidate.candidate_id === selectedId,
         hovered: candidate.candidate_id === hoveredId,
@@ -154,26 +159,38 @@ export function SkyView({
     });
   }, [candidates, hoveredId, selectedId]);
 
-  const markerGroups = useMemo(() => {
-    const groups: Array<{ id: string; markers: SkyMarker[]; x: number; y: number }> = [];
-    for (const marker of markers) {
-      const pixel = toPixel(marker.position);
-      const match = groups.find((group) => Math.hypot(group.x - pixel.x, group.y - pixel.y) <= 3.2);
-      if (match) {
-        match.markers.push(marker);
-        match.x = (match.x * (match.markers.length - 1) + pixel.x) / match.markers.length;
-        match.y = (match.y * (match.markers.length - 1) + pixel.y) / match.markers.length;
-      } else {
-        groups.push({ id: marker.candidate.candidate_id, markers: [marker], x: pixel.x, y: pixel.y });
-      }
-    }
-    return groups.map((group) => ({
-      ...group,
-      id: group.markers.map((marker) => marker.candidate.candidate_id).sort().join('|'),
-    }));
-  }, [markers, toPixel]);
-
   const selectedMarker = markers.find((marker) => marker.selected) ?? null;
+  const [expandedGroupId, setExpandedGroupId] = useState<string | null>(null);
+
+  const markerGroups = useMemo<MarkerGroup[]>(() => {
+    const clampMarkerPixel = (point: { x: number; y: number }) => ({
+      x: Math.min(width - 0.2, Math.max(0.2, point.x)),
+      y: Math.min(height - 0.2, Math.max(0.2, point.y)),
+    });
+    const groups: MarkerGroup[] = [];
+    for (const marker of markers) {
+      const rawPixel = toPixel(marker.position);
+      const pixel = clampMarkerPixel(rawPixel);
+      const group = groups.find((candidateGroup) => {
+        return Math.hypot(candidateGroup.pixel.x - pixel.x, candidateGroup.pixel.y - pixel.y) <= 3.2;
+      });
+      if (!group) {
+        groups.push({
+          id: marker.candidate.candidate_id,
+          markers: [marker],
+          pixel,
+        });
+        continue;
+      }
+      group.markers.push(marker);
+      group.pixel = {
+        x: group.markers.reduce((sum, item) => sum + clampMarkerPixel(toPixel(item.position)).x, 0) / group.markers.length,
+        y: group.markers.reduce((sum, item) => sum + clampMarkerPixel(toPixel(item.position)).y, 0) / group.markers.length,
+      };
+      group.id = group.markers.map((item) => item.candidate.candidate_id).sort().join(':');
+    }
+    return groups;
+  }, [height, markers, toPixel, width]);
 
   const trackPixels = useMemo(() => {
     if (!track || track.length === 0) return [];
@@ -270,7 +287,8 @@ export function SkyView({
     return { x, y, width: viewWidth, height: viewHeight };
   }, [height, pan.x, pan.y, width, zoom]);
 
-  // Keep markers and stored tracks inside the field image.
+  // Keep stored marker positions inside the field image when the WCS lands a
+  // point just outside the crop.
   const clampPixel = useCallback(
     (point: { x: number; y: number }, margin: number) => ({
       x: Math.min(width - margin, Math.max(margin, point.x)),
@@ -422,7 +440,7 @@ export function SkyView({
             </clipPath>
           </defs>
 
-          <rect x="0" y="0" width={width} height={height} fill="#0b1220" />
+          <rect x="0" y="0" width={width} height={height} fill="#0d1319" />
           {imageUrl && (
             <image
               href={imageUrl}
@@ -455,7 +473,7 @@ export function SkyView({
               gridLines.horizontal.map((y) => (
                 <line key={`h${y}`} x1="0" x2={width} y1={y} y2={y} className="sky-grid" strokeWidth="0.06" />
               ))}
-            <rect x="0" y="0" width={width} height={height} fill="none" stroke="#3b4a69" strokeWidth="0.12" />
+            <rect x="0" y="0" width={width} height={height} fill="none" stroke="#364752" strokeWidth="0.12" />
           </g>
 
           {layers.includes('hypothesis') &&
@@ -555,8 +573,9 @@ export function SkyView({
               marker.staticFlag ? layers.includes('static') : layers.includes('moving'),
             );
             if (visibleMarkers.length === 0) return null;
-            const expanded = group.markers.length === 1 || expandedGroupId === group.id;
-            if (!expanded) {
+            const expanded =
+              expandedGroupId === group.id || visibleMarkers.some((marker) => marker.selected);
+            if (visibleMarkers.length > 1 && !expanded) {
               return (
                 <g
                   key={group.id}
@@ -575,23 +594,25 @@ export function SkyView({
                     }
                   }}
                 >
-                  <circle cx={group.x} cy={group.y} r="3.2" fill={CANDIDATE_COLOR} fillOpacity="0.18" stroke={CANDIDATE_COLOR} strokeWidth="0.22" />
-                  <text x={group.x} y={group.y + 1.2} textAnchor="middle" fill={CANDIDATE_COLOR} fontSize="2.4" fontWeight="700">
+                  <circle cx={group.pixel.x} cy={group.pixel.y} r="2.7" fill="#101820" stroke={CANDIDATE_COLOR} strokeWidth="0.22" />
+                  <text
+                    x={group.pixel.x}
+                    y={group.pixel.y + 0.45}
+                    textAnchor="middle"
+                    fill={CANDIDATE_COLOR}
+                    fontSize="1.5"
+                    fontFamily="'IBM Plex Mono', monospace"
+                  >
                     {visibleMarkers.length}
                   </text>
-                  <title>{`${visibleMarkers.length} overlapping unconfirmed candidates · click to expand`}</title>
+                  <title>{`${visibleMarkers.length} overlapping unconfirmed candidates. Click to expand.`}</title>
                 </g>
               );
             }
-            return visibleMarkers.map((marker, index) => {
+            return visibleMarkers.map((marker) => {
               const color = marker.staticFlag ? STATIC_COLOR : CANDIDATE_COLOR;
               const half = marker.selected ? 1.9 : marker.hovered ? 1.7 : 1.45;
               const pixel = clampPixel(toPixel(marker.position), half + 0.1);
-              const offset = group.markers.length > 1
-                ? { x: (index - (visibleMarkers.length - 1) / 2) * 4, y: -((index % 2) * 3) }
-                : { x: 0, y: 0 };
-              const displayX = pixel.x + offset.x;
-              const displayY = pixel.y + offset.y;
               return (
                 <g
                   key={marker.candidate.candidate_id}
@@ -616,8 +637,8 @@ export function SkyView({
                 >
                   {marker.selected && (
                     <rect
-                      x={displayX - half * 2.2}
-                      y={displayY - half * 2.2}
+                      x={pixel.x - half * 2.2}
+                      y={pixel.y - half * 2.2}
                       width={half * 4.4}
                       height={half * 4.4}
                       rx={0.9}
@@ -626,8 +647,8 @@ export function SkyView({
                     />
                   )}
                   <rect
-                    x={displayX - half}
-                    y={displayY - half}
+                    x={pixel.x - half}
+                    y={pixel.y - half}
                     width={half * 2}
                     height={half * 2}
                     fill="none"
@@ -635,18 +656,20 @@ export function SkyView({
                     strokeWidth={marker.selected ? 0.24 : 0.17}
                     strokeDasharray={marker.staticFlag ? '0.45 0.3' : undefined}
                   />
-                  <text
-                    x={displayX + half + 0.4}
-                    y={displayY + 0.35}
-                    fill={color}
-                    fontSize="1.05"
-                    fontFamily="'JetBrains Mono Variable', monospace"
-                    paintOrder="stroke"
-                    stroke="#07111f"
-                    strokeWidth="0.22"
-                  >
-                    {marker.candidate.ordinal ? `#${String(marker.candidate.ordinal).padStart(3, '0')}` : '#'}
-                  </text>
+                  {expanded && visibleMarkers.length > 1 ? null : (
+                    <text
+                      x={pixel.x + half + 0.4}
+                      y={pixel.y + 0.35}
+                      fill={color}
+                      fontSize="1.05"
+                      fontFamily="'IBM Plex Mono', monospace"
+                      paintOrder="stroke"
+                      stroke="#0d1319"
+                      strokeWidth="0.22"
+                    >
+                      {marker.candidate.ordinal ? `#${String(marker.candidate.ordinal).padStart(3, '0')}` : '#'}
+                    </text>
+                  )}
                   <title>
                     {`${marker.candidate.ordinal ? `#${marker.candidate.ordinal}` : 'Candidate'} · ${
                       marker.staticFlag ? 'static-source flag' : 'moving'
@@ -665,7 +688,7 @@ export function SkyView({
               textAnchor={
                 index === 0 ? 'start' : index === raTicks.length - 1 ? 'end' : 'middle'
               }
-              fill="#9aa3b8"
+              fill="#82929b"
               fontSize="0.95"
               fontFamily="'IBM Plex Mono', monospace"
             >
@@ -678,7 +701,7 @@ export function SkyView({
               x={viewBox.x + 0.4}
               y={tick.y}
               textAnchor="start"
-              fill="#9aa3b8"
+              fill="#82929b"
               fontSize="0.95"
               fontFamily="'IBM Plex Mono', monospace"
             >
@@ -699,7 +722,7 @@ export function SkyView({
             role="img"
             aria-label="Wide-sky context around the field. Click to recenter the view."
             onClick={onInsetClick}
-            className="block h-[92px] w-[124px] cursor-crosshair rounded-sm border border-sky-line/60 bg-[#0d1526]/90"
+            className="block h-[92px] w-[124px] cursor-crosshair rounded-sm border border-sky-line/60 bg-[#0d1319]/90"
           >
             <title>Wide-sky inset: the field sits inside a wider patch. Click to recenter.</title>
             <rect
@@ -707,9 +730,9 @@ export function SkyView({
               y={-insetPadY}
               width={width + insetPadX * 2}
               height={height + insetPadY * 2}
-              fill="#0d1526"
+              fill="#0d1319"
             />
-            <rect x="0" y="0" width={width} height={height} fill="none" stroke="#3b4a69" strokeWidth="0.6" />
+            <rect x="0" y="0" width={width} height={height} fill="none" stroke="#364752" strokeWidth="0.6" />
             {trackPath && (
               <path d={trackPath} fill="none" stroke={CANDIDATE_COLOR} strokeOpacity="0.6" strokeWidth="0.9" />
             )}
@@ -728,21 +751,22 @@ export function SkyView({
                 marker.staticFlag ? layers.includes('static') : layers.includes('moving'),
               );
               if (visibleMarkers.length === 0) return null;
-              return (
+              return visibleMarkers.length > 1 ? (
                 <g key={`inset-${group.id}`}>
-                  <circle
-                    cx={group.x}
-                    cy={group.y}
-                    r={visibleMarkers.length > 1 ? 2.4 : visibleMarkers[0].selected ? 2 : 1.1}
-                    fill={visibleMarkers[0].staticFlag ? STATIC_COLOR : CANDIDATE_COLOR}
-                    fillOpacity={visibleMarkers[0].selected ? 1 : 0.7}
-                  />
-                  {visibleMarkers.length > 1 && (
-                    <text x={group.x} y={group.y + 0.8} textAnchor="middle" fill={CANDIDATE_COLOR} fontSize="1.8">
-                      {visibleMarkers.length}
-                    </text>
-                  )}
+                  <circle cx={group.pixel.x} cy={group.pixel.y} r="2.6" fill="#101820" stroke={CANDIDATE_COLOR} strokeWidth="0.6" />
+                  <text x={group.pixel.x} y={group.pixel.y + 0.9} textAnchor="middle" fill={CANDIDATE_COLOR} fontSize="2.2" fontFamily="'IBM Plex Mono', monospace">
+                    {visibleMarkers.length}
+                  </text>
                 </g>
+              ) : (
+                <circle
+                  key={`inset-${group.id}`}
+                  cx={group.pixel.x}
+                  cy={group.pixel.y}
+                  r={visibleMarkers[0].selected ? 2 : 1.1}
+                  fill={visibleMarkers[0].staticFlag ? STATIC_COLOR : CANDIDATE_COLOR}
+                  fillOpacity={visibleMarkers[0].selected ? 1 : 0.7}
+                />
               );
             })}
             <rect
@@ -751,11 +775,11 @@ export function SkyView({
               width={viewBox.width}
               height={viewBox.height}
               fill="rgba(123,147,255,0.10)"
-              stroke="#7b93ff"
+              stroke="#39b8c4"
               strokeWidth="0.8"
             />
           </svg>
-          <span className="w-[124px] text-center font-mono text-[10px] text-star/60">
+          <span className="w-[124px] text-center text-[10px] leading-tight text-star/70">
             Patch context · click to recenter
           </span>
         </div>
