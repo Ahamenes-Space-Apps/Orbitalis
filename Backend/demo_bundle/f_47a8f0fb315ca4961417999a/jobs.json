@@ -1,0 +1,218 @@
+[
+  {
+    "created_at": "2026-11-15 08:35:24",
+    "error_code": null,
+    "field_id": "f_47a8f0fb315ca4961417999a",
+    "finished_at": "2026-11-15 08:35:34",
+    "job_id": "j_55525695a7112f01a56647cc",
+    "kind": "moving_object_search",
+    "params": {
+      "background_variant": "f",
+      "field_id": "f_47a8f0fb315ca4961417999a",
+      "frame_window": {
+        "min_time_separation_days": 0.1,
+        "mjd_max": 61312.2,
+        "mjd_min": 61304.7,
+        "wavelength_max_um": 2.09,
+        "wavelength_min_um": 1.63
+      },
+      "min_coverage_fraction": 0.5,
+      "noise_model": "per_frame"
+    },
+    "progress": {
+      "done": 1041,
+      "stage": "done",
+      "total": 1041,
+      "warnings": [
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "candidate extraction/static-source handling are PROVISIONAL(G1); D-24 variant f preprocessing applied; static-source heuristic recorded"
+        }
+      ]
+    },
+    "result": {
+      "background_variant": "f",
+      "background_variant_requested": "f",
+      "candidate_ids": [
+        "c_589a89fc39e8d44c0f98d9f7",
+        "c_d926af51d171c0fcc8af1599",
+        "c_18a9225a90ea316a4c33ce23",
+        "c_50fb99614a5c4444454d7f0d",
+        "c_751ed23029ef891362688fa4",
+        "c_b50169244175dba631b00b56",
+        "c_582f902e8eadcfe606f035fb",
+        "c_ca1fd942d61b7796669cc0c2",
+        "c_f7202ed414696a6ab011df1b",
+        "c_1412a15b73227ec29a03d270",
+        "c_5c2ac7977d070176f6f7684c",
+        "c_1d8a4f3ec6ef9ef9910eb1b3",
+        "c_1681982f9f34cb06310d86fd",
+        "c_5269b7336d341671450a0717"
+      ],
+      "candidates_found": 14,
+      "candidates_persisted": 14,
+      "candidates_truncated": false,
+      "extraction_diagnostic": null,
+      "extraction_method": "provisional_sigma_threshold_nms",
+      "field_id": "f_47a8f0fb315ca4961417999a",
+      "frame_window": {
+        "frame_refs": [
+          "qr3.01a0db40-df5f-76b5-b814-4458278f66dfD3",
+          "qr3.01a0db40-e255-7ab2-b3d3-bcbf1dafc250D3",
+          "qr3.01a0db40-de9e-731b-9418-b59859987a06D3",
+          "qr3.01a0e9f6-e18e-7711-9f42-3f10d515fe01D3",
+          "qr3.01a0e9f6-dd84-7278-8c6d-53810f7689f2D3",
+          "qr3.01a0e9f6-dca2-70f6-b4f5-cdac4ba60ca8D3",
+          "qr3.01a0e9f6-e0a4-7f5a-9719-566ceaf3250dD3",
+          "qr3.01a0ed07-f7de-7d4a-9675-bad268433e9bD3",
+          "qr3.01a1025b-bc3c-7a8a-bcfb-2755bdc74c2fD3"
+        ],
+        "max_span_days": null,
+        "min_time_separation_days": 0.1,
+        "mjd_max": 61312.2,
+        "mjd_min": 61304.7,
+        "n_frames_available": 9,
+        "n_frames_requested": null,
+        "n_frames_selected": 9,
+        "n_time_deduplicated": 0,
+        "n_wavelength_dropped": 0,
+        "wavelength_max_um": 2.09,
+        "wavelength_min_um": 1.63
+      },
+      "frames_used": 9,
+      "interpolation_order": 1,
+      "job_id": "j_55525695a7112f01a56647cc",
+      "model_ran": false,
+      "motion_trials": 1041,
+      "noise_calibration": 1.832395285965493,
+      "noise_model": "per_frame",
+      "noise_model_frame_ratios": [
+        1.848261,
+        0.683398,
+        1.81703,
+        1.955313,
+        2.005681,
+        1.232173,
+        1.832395,
+        2.348321,
+        1.043317
+      ],
+      "reference_time_mjd": 61305.226906,
+      "stack_pngs_failed": 0,
+      "static_source_handling": "d24_variant_f_difference_imaging_q5_coadd_highpass_15px_provisional_g1",
+      "static_sources_flagged": 2,
+      "status": "unconfirmed_candidates",
+      "work_estimate": 32613489,
+      "zero_motion_trial_index": 520
+    },
+    "started_at": "2026-11-15 08:35:24",
+    "status": "completed"
+  },
+  {
+    "created_at": "2026-11-15 08:35:36",
+    "error_code": null,
+    "field_id": "f_47a8f0fb315ca4961417999a",
+    "finished_at": "2026-11-15 08:38:15",
+    "job_id": "j_c3d09249623ee6a4112bdfb8",
+    "kind": "validation",
+    "params": {
+      "background_variant": "f",
+      "field_id": "f_47a8f0fb315ca4961417999a",
+      "frame_window": {
+        "min_time_separation_days": 0.1,
+        "mjd_max": 61312.2,
+        "mjd_min": 61304.7,
+        "wavelength_max_um": 2.09,
+        "wavelength_min_um": 1.63
+      },
+      "label": "demo-bundle",
+      "min_coverage_fraction": 0.5,
+      "n_injections": 20,
+      "noise_model": "per_frame",
+      "seed": 20261115,
+      "snr_max": 40.0,
+      "snr_min": 5.0,
+      "speed_max_arcsec_per_day": 8.0,
+      "speed_min_arcsec_per_day": 1.0
+    },
+    "progress": {
+      "done": 20,
+      "stage": "trial",
+      "total": 21,
+      "warnings": [
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "candidate extraction/static-source handling are PROVISIONAL(G1); D-24 variant f preprocessing applied; static-source heuristic recorded"
+        }
+      ]
+    },
+    "result": {
+      "background_variant": "f",
+      "experiment_id": "exp_7f32dd27b3d3984f65f7a2e9",
+      "field_id": "f_47a8f0fb315ca4961417999a",
+      "interpolation_order": 1,
+      "job_id": "j_c3d09249623ee6a4112bdfb8",
+      "match_radius_px": 1.5,
+      "n_missed_truth": 5,
+      "n_preexisting_truth": 3,
+      "n_recovered_truth": 12,
+      "n_spurious_detections": 8,
+      "n_trials": 20,
+      "noise_model": "per_frame",
+      "noise_model_frame_ratios": [
+        1.848261,
+        0.683398,
+        1.81703,
+        1.955313,
+        2.005681,
+        1.232173,
+        1.832395,
+        2.348321,
+        1.043317
+      ],
+      "partial": false,
+      "position_error": {
+        "max_px": 0.6028360998420828,
+        "median_px": 0.3233796788081641,
+        "n": 12,
+        "p90_px": 0.4234337528171949
+      },
+      "precision": 0.6,
+      "precision_ci": [
+        0.3865815007622531,
+        0.781193467627183
+      ],
+      "recall": 0.7058823529411765,
+      "recall_ci": [
+        0.4686688993346016,
+        0.8672001038970478
+      ],
+      "reference_time_mjd": 61305.226906,
+      "seed": 20261115,
+      "spurious_counts": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0
+      ]
+    },
+    "started_at": "2026-11-15 08:35:36",
+    "status": "completed"
+  }
+]

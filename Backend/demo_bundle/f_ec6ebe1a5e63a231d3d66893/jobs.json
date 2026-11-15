@@ -1,0 +1,215 @@
+[
+  {
+    "created_at": "2026-11-15 08:38:16",
+    "error_code": null,
+    "field_id": "f_ec6ebe1a5e63a231d3d66893",
+    "finished_at": "2026-11-15 08:38:23",
+    "job_id": "j_3130a48afa9c33a15f4da6b2",
+    "kind": "moving_object_search",
+    "params": {
+      "background_variant": "f",
+      "field_id": "f_ec6ebe1a5e63a231d3d66893",
+      "frame_window": {
+        "min_time_separation_days": 0.1,
+        "mjd_max": 60992.5,
+        "mjd_min": 60985.5,
+        "wavelength_max_um": 1.56,
+        "wavelength_min_um": 1.08
+      },
+      "min_coverage_fraction": 0.5,
+      "noise_model": "per_frame"
+    },
+    "progress": {
+      "done": 1041,
+      "stage": "done",
+      "total": 1041,
+      "warnings": [
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "candidate extraction/static-source handling are PROVISIONAL(G1); D-24 variant f preprocessing applied; static-source heuristic recorded"
+        }
+      ]
+    },
+    "result": {
+      "background_variant": "f",
+      "background_variant_requested": "f",
+      "candidate_ids": [
+        "c_cb1f35b0d591b2d136b3274c",
+        "c_164c48e7a47d749b5ed477a2",
+        "c_8073b648e3aec5336e5b2ad5",
+        "c_f1ab7c6dd51eb91cf4ab46c4",
+        "c_df1ccfcd1671d9b53cf115bc",
+        "c_9853803d429ac4c97854d224",
+        "c_1501833f62bb3e7aeddec31b",
+        "c_4d2bf1558b6c4e530140c45b",
+        "c_02b817c7ace2474285681abd",
+        "c_30e0097820d02a2d93d9804a",
+        "c_502a00d2365ddb22865cb3fa",
+        "c_d9ca4925cb66e79af7aab84f",
+        "c_370112db2afa65a8a5bdb4aa",
+        "c_f4a5261be092154d956c88e7",
+        "c_346dc0faa56db45720e19c1d",
+        "c_3686f2e48ae87c3f84e4c5fa",
+        "c_d28a051e2059f7bcb4baa01b",
+        "c_c575523f644cc684ad65dee7",
+        "c_d06141f3a772c38515ef9954",
+        "c_85b94078cf77e355d7d6187e",
+        "c_0e9dc0ee563d8eec4e6bdec9",
+        "c_e44cbe2c34fdd53395e6004c",
+        "c_22bded2c11ce5b6743e4401a"
+      ],
+      "candidates_found": 23,
+      "candidates_persisted": 23,
+      "candidates_truncated": false,
+      "extraction_diagnostic": null,
+      "extraction_method": "provisional_sigma_threshold_nms",
+      "field_id": "f_ec6ebe1a5e63a231d3d66893",
+      "frame_window": {
+        "frame_refs": [
+          "qr2.d9940807-520b-48ce-9bc8-372b7cdfe6beD2",
+          "qr2.76586c3c-85dc-4ea8-9f32-009f86328c98D2",
+          "qr2.7bc2f8f1-890f-4856-90f5-49d0f5eeddedD2",
+          "qr2.3b1d5033-989e-4c8a-9e98-46132135bcc5D2",
+          "qr2.85ed9e32-57e0-4e50-b2b9-4ba000011ec4D2"
+        ],
+        "max_span_days": null,
+        "min_time_separation_days": 0.1,
+        "mjd_max": 60992.5,
+        "mjd_min": 60985.5,
+        "n_frames_available": 5,
+        "n_frames_requested": null,
+        "n_frames_selected": 5,
+        "n_time_deduplicated": 0,
+        "n_wavelength_dropped": 0,
+        "wavelength_max_um": 1.56,
+        "wavelength_min_um": 1.08
+      },
+      "frames_used": 5,
+      "interpolation_order": 1,
+      "job_id": "j_3130a48afa9c33a15f4da6b2",
+      "model_ran": false,
+      "motion_trials": 1041,
+      "noise_calibration": 1.5912727040152599,
+      "noise_model": "per_frame",
+      "noise_model_frame_ratios": [
+        6.365091,
+        0.58042,
+        1.591273,
+        2.055863,
+        0.397818
+      ],
+      "reference_time_mjd": 60986.240989,
+      "stack_pngs_failed": 0,
+      "static_source_handling": "d24_variant_f_difference_imaging_q5_coadd_highpass_15px_provisional_g1",
+      "static_sources_flagged": 3,
+      "status": "unconfirmed_candidates",
+      "work_estimate": 18118605,
+      "zero_motion_trial_index": 520
+    },
+    "started_at": "2026-11-15 08:38:16",
+    "status": "completed"
+  },
+  {
+    "created_at": "2026-11-15 08:38:24",
+    "error_code": null,
+    "field_id": "f_ec6ebe1a5e63a231d3d66893",
+    "finished_at": "2026-11-15 08:39:58",
+    "job_id": "j_2b9da9847120ae8a092b2b0e",
+    "kind": "validation",
+    "params": {
+      "background_variant": "f",
+      "field_id": "f_ec6ebe1a5e63a231d3d66893",
+      "frame_window": {
+        "min_time_separation_days": 0.1,
+        "mjd_max": 60992.5,
+        "mjd_min": 60985.5,
+        "wavelength_max_um": 1.56,
+        "wavelength_min_um": 1.08
+      },
+      "label": "demo-bundle",
+      "min_coverage_fraction": 0.5,
+      "n_injections": 20,
+      "noise_model": "per_frame",
+      "seed": 20261115,
+      "snr_max": 40.0,
+      "snr_min": 5.0,
+      "speed_max_arcsec_per_day": 8.0,
+      "speed_min_arcsec_per_day": 1.0
+    },
+    "progress": {
+      "done": 20,
+      "stage": "trial",
+      "total": 21,
+      "warnings": [
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "candidate extraction/static-source handling are PROVISIONAL(G1); D-24 variant f preprocessing applied; static-source heuristic recorded"
+        }
+      ]
+    },
+    "result": {
+      "background_variant": "f",
+      "experiment_id": "exp_15cb4ccf4313c6f7be26e26b",
+      "field_id": "f_ec6ebe1a5e63a231d3d66893",
+      "interpolation_order": 1,
+      "job_id": "j_2b9da9847120ae8a092b2b0e",
+      "match_radius_px": 1.5,
+      "n_missed_truth": 7,
+      "n_preexisting_truth": 2,
+      "n_recovered_truth": 11,
+      "n_spurious_detections": 21,
+      "n_trials": 20,
+      "noise_model": "per_frame",
+      "noise_model_frame_ratios": [
+        6.365091,
+        0.58042,
+        1.591273,
+        2.055863,
+        0.397818
+      ],
+      "partial": false,
+      "position_error": {
+        "max_px": 1.07612763624712,
+        "median_px": 0.35221541255009653,
+        "n": 11,
+        "p90_px": 0.5442753259062183
+      },
+      "precision": 0.3225806451612903,
+      "precision_ci": [
+        0.18569426566359176,
+        0.49858990691914357
+      ],
+      "recall": 0.6111111111111112,
+      "recall_ci": [
+        0.3861904160223791,
+        0.7969475342783638
+      ],
+      "reference_time_mjd": 60986.240989,
+      "seed": 20261115,
+      "spurious_counts": [
+        3,
+        2,
+        2,
+        1,
+        3,
+        2,
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "started_at": "2026-11-15 08:38:24",
+    "status": "completed"
+  }
+]

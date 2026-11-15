@@ -1,0 +1,235 @@
+[
+  {
+    "created_at": "2026-11-15 08:41:39",
+    "error_code": null,
+    "field_id": "f_be719d6214cce7c417ef1b88",
+    "finished_at": "2026-11-15 08:41:54",
+    "job_id": "j_efc200b5a4698aa3b9ecf2c7",
+    "kind": "moving_object_search",
+    "params": {
+      "background_variant": "f",
+      "field_id": "f_be719d6214cce7c417ef1b88",
+      "frame_window": {
+        "min_time_separation_days": 0.1,
+        "mjd_max": 61280.5,
+        "mjd_min": 61272.8,
+        "n_frames": 40,
+        "wavelength_max_um": 1.2,
+        "wavelength_min_um": 0.74
+      },
+      "min_coverage_fraction": 0.5,
+      "noise_model": "per_frame"
+    },
+    "progress": {
+      "done": 1041,
+      "stage": "done",
+      "total": 1041,
+      "warnings": [
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "candidate extraction/static-source handling are PROVISIONAL(G1); D-24 variant f preprocessing applied; static-source heuristic recorded"
+        }
+      ]
+    },
+    "result": {
+      "background_variant": "f",
+      "background_variant_requested": "f",
+      "candidate_ids": [
+        "c_8bee9239f077a430673d7263",
+        "c_2cebebf1e2c9b022d1aec61d",
+        "c_39dbdf7f2a4b3f71b88f4921",
+        "c_d58e457e77f4aace285d0d18",
+        "c_5fd4e7db5638800e30c6d46a",
+        "c_2bed9006ea2dc43f9174f5cc",
+        "c_e34c4aff5521eb1b2e91676c",
+        "c_16bbdcaeafa0567b9099f56a",
+        "c_ec8f5d42f3bb00379569d4ca",
+        "c_8f69a2bf3c5912fcbe107f35",
+        "c_016e86d7103398db07818f1b",
+        "c_b1c6107d546f6ac6813449c0",
+        "c_19369f01e74ba66dcdf3cd27",
+        "c_c5bc9428f484771c83d13f59"
+      ],
+      "candidates_found": 14,
+      "candidates_persisted": 14,
+      "candidates_truncated": false,
+      "extraction_diagnostic": null,
+      "extraction_method": "provisional_sigma_threshold_nms",
+      "field_id": "f_be719d6214cce7c417ef1b88",
+      "frame_window": {
+        "frame_refs": [
+          "qr3.01a0eea5-f3b9-7b55-b35d-9cb7f7537159D1",
+          "qr3.01a0eead-b8ab-7eb4-879b-eee93e835b18D1",
+          "qr3.01a0eec5-f184-7039-afee-cbeb28a39fb8D1",
+          "qr3.01a0eee6-b8dd-71a0-955a-978eaa0be452D1",
+          "qr3.01a0ef33-1af4-7be1-ac26-b509e9e52a0cD1",
+          "qr3.01a0ef3b-639b-7cd2-bdc8-e43e2ee9ffccD1",
+          "qr3.01a0ef3e-d93a-7a62-a08d-84cb8b22356bD1",
+          "qr3.01a0ef46-b200-7fc8-bc92-de2a2dfc6408D1",
+          "qr3.01a0ef4a-84b2-719e-8bca-0aacba3bd70eD1",
+          "qr3.01a0ef50-4621-7057-b060-8e367923e0c8D1",
+          "qr3.01a0ef77-2ebd-7c73-b68d-d5dca32c432bD1",
+          "qr3.01a0ef1c-03d3-7c5f-a221-e5994f6ccf62D1",
+          "qr3.01a0ef28-6d62-7148-803e-f705c62f826aD1",
+          "qr3.01a0ef2f-0dd1-7274-b52e-c0b1aef4249bD1"
+        ],
+        "max_span_days": null,
+        "min_time_separation_days": 0.1,
+        "mjd_max": 61280.5,
+        "mjd_min": 61272.8,
+        "n_frames_available": 14,
+        "n_frames_requested": 40,
+        "n_frames_selected": 14,
+        "n_time_deduplicated": 0,
+        "n_wavelength_dropped": 0,
+        "wavelength_max_um": 1.2,
+        "wavelength_min_um": 0.74
+      },
+      "frames_used": 14,
+      "interpolation_order": 1,
+      "job_id": "j_efc200b5a4698aa3b9ecf2c7",
+      "model_ran": false,
+      "motion_trials": 1041,
+      "noise_calibration": 10.662432904185103,
+      "noise_model": "per_frame",
+      "noise_model_frame_ratios": [
+        2.665608,
+        9.748005,
+        2.665608,
+        2.849333,
+        42.649732,
+        6.97807,
+        2.665608,
+        42.649732,
+        39.746523,
+        40.911804,
+        5.239386,
+        17.541019,
+        11.576861,
+        42.649732
+      ],
+      "reference_time_mjd": 61273.302138,
+      "stack_pngs_failed": 0,
+      "static_source_handling": "d24_variant_f_difference_imaging_q5_coadd_highpass_15px_provisional_g1",
+      "static_sources_flagged": 3,
+      "status": "unconfirmed_candidates",
+      "work_estimate": 50732094,
+      "zero_motion_trial_index": 520
+    },
+    "started_at": "2026-11-15 08:41:39",
+    "status": "completed"
+  },
+  {
+    "created_at": "2026-11-15 08:41:55",
+    "error_code": null,
+    "field_id": "f_be719d6214cce7c417ef1b88",
+    "finished_at": "2026-11-15 08:46:02",
+    "job_id": "j_b99ef1d56631e08f8cbd2d46",
+    "kind": "validation",
+    "params": {
+      "background_variant": "f",
+      "field_id": "f_be719d6214cce7c417ef1b88",
+      "frame_window": {
+        "min_time_separation_days": 0.1,
+        "mjd_max": 61280.5,
+        "mjd_min": 61272.8,
+        "n_frames": 40,
+        "wavelength_max_um": 1.2,
+        "wavelength_min_um": 0.74
+      },
+      "label": "demo-bundle",
+      "min_coverage_fraction": 0.5,
+      "n_injections": 20,
+      "noise_model": "per_frame",
+      "seed": 20261115,
+      "snr_max": 40.0,
+      "snr_min": 5.0,
+      "speed_max_arcsec_per_day": 8.0,
+      "speed_min_arcsec_per_day": 1.0
+    },
+    "progress": {
+      "done": 20,
+      "stage": "trial",
+      "total": 21,
+      "warnings": [
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "candidate extraction/static-source handling are PROVISIONAL(G1); D-24 variant f preprocessing applied; static-source heuristic recorded"
+        }
+      ]
+    },
+    "result": {
+      "background_variant": "f",
+      "experiment_id": "exp_ebaf47d2d845c5c9d16b3de0",
+      "field_id": "f_be719d6214cce7c417ef1b88",
+      "interpolation_order": 1,
+      "job_id": "j_b99ef1d56631e08f8cbd2d46",
+      "match_radius_px": 1.5,
+      "n_missed_truth": 2,
+      "n_preexisting_truth": 3,
+      "n_recovered_truth": 15,
+      "n_spurious_detections": 36,
+      "n_trials": 20,
+      "noise_model": "per_frame",
+      "noise_model_frame_ratios": [
+        2.665608,
+        9.748005,
+        2.665608,
+        2.849333,
+        42.649732,
+        6.97807,
+        2.665608,
+        42.649732,
+        39.746523,
+        40.911804,
+        5.239386,
+        17.541019,
+        11.576861,
+        42.649732
+      ],
+      "partial": false,
+      "position_error": {
+        "max_px": 0.5237416326011658,
+        "median_px": 0.3304355053960569,
+        "n": 15,
+        "p90_px": 0.4427413952615828
+      },
+      "precision": 0.29411764705882354,
+      "precision_ci": [
+        0.1870872642013547,
+        0.4299907557568642
+      ],
+      "recall": 0.8823529411764706,
+      "recall_ci": [
+        0.6566364940511412,
+        0.9671202262362074
+      ],
+      "reference_time_mjd": 61273.302138,
+      "seed": 20261115,
+      "spurious_counts": [
+        2,
+        0,
+        3,
+        5,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        4,
+        0,
+        0,
+        0,
+        5,
+        4,
+        0,
+        0,
+        5,
+        6
+      ]
+    },
+    "started_at": "2026-11-15 08:41:55",
+    "status": "completed"
+  }
+]

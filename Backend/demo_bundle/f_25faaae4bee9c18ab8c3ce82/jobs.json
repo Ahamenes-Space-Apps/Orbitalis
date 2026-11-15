@@ -1,0 +1,209 @@
+[
+  {
+    "created_at": "2026-11-15 08:32:35",
+    "error_code": null,
+    "field_id": "f_25faaae4bee9c18ab8c3ce82",
+    "finished_at": "2026-11-15 08:32:44",
+    "job_id": "j_2c148edbb59dc6eb2505a688",
+    "kind": "moving_object_search",
+    "params": {
+      "background_variant": "f",
+      "field_id": "f_25faaae4bee9c18ab8c3ce82",
+      "frame_window": {
+        "min_time_separation_days": 0.1,
+        "mjd_max": 60847.0,
+        "mjd_min": 60840.0,
+        "wavelength_max_um": 1.2,
+        "wavelength_min_um": 0.74
+      },
+      "min_coverage_fraction": 0.5,
+      "noise_model": "per_frame"
+    },
+    "progress": {
+      "done": 1041,
+      "stage": "done",
+      "total": 1041,
+      "warnings": [
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "candidate extraction/static-source handling are PROVISIONAL(G1); D-24 variant f preprocessing applied; static-source heuristic recorded"
+        }
+      ]
+    },
+    "result": {
+      "background_variant": "f",
+      "background_variant_requested": "f",
+      "candidate_ids": [
+        "c_116c69b314c5ab50b7d355ec",
+        "c_12729055bb4e4f16f300305e",
+        "c_8101a5c73a8ff03cabd6a406",
+        "c_e065bb36c5c3d9d1ec39569c",
+        "c_3e9787bcbb5d893ddeba8fdc",
+        "c_37c1cf002f636b8963a31e64",
+        "c_e6793609b51e13f3967b6e28",
+        "c_ea4c8a51684acf8a1e912e2d",
+        "c_a6746c8363451e8b1b4f8f34",
+        "c_bcea0d17d72952ff0e2562ea",
+        "c_1656177622ac2e42dab1528b",
+        "c_7eb4ef9d9036f632037d9bf3",
+        "c_786357e16d88da12d9752aaa",
+        "c_abf717376c6c90347e5af5ae",
+        "c_73b1580aec4a94365c4b8515",
+        "c_72e99034651800fb379094da",
+        "c_bf7fa9941b8fd6e78f33b894"
+      ],
+      "candidates_found": 17,
+      "candidates_persisted": 17,
+      "candidates_truncated": false,
+      "extraction_diagnostic": null,
+      "extraction_method": "provisional_sigma_threshold_nms",
+      "field_id": "f_25faaae4bee9c18ab8c3ce82",
+      "frame_window": {
+        "frame_refs": [
+          "qr2.b8b71d02-0650-4a29-b47b-3b4b1cdbcad6D1",
+          "qr2.62594ca0-470f-4920-9ccd-841f1b51e12dD1",
+          "qr2.1b2d4f42-5b42-4b0a-9a02-955f37d3fb48D1",
+          "qr2.14761598-64d6-40d0-98b1-c7d36babdb67D1",
+          "qr2.58114b09-6433-44c6-b508-2e6675348696D1"
+        ],
+        "max_span_days": null,
+        "min_time_separation_days": 0.1,
+        "mjd_max": 60847.0,
+        "mjd_min": 60840.0,
+        "n_frames_available": 5,
+        "n_frames_requested": null,
+        "n_frames_selected": 5,
+        "n_time_deduplicated": 0,
+        "n_wavelength_dropped": 0,
+        "wavelength_max_um": 1.2,
+        "wavelength_min_um": 0.74
+      },
+      "frames_used": 5,
+      "interpolation_order": 1,
+      "job_id": "j_2c148edbb59dc6eb2505a688",
+      "model_ran": false,
+      "motion_trials": 1041,
+      "noise_calibration": 2.274502102733394,
+      "noise_model": "per_frame",
+      "noise_model_frame_ratios": [
+        1.052753,
+        3.690637,
+        1.079161,
+        2.274502,
+        2.449331
+      ],
+      "reference_time_mjd": 60840.250038,
+      "stack_pngs_failed": 0,
+      "static_source_handling": "d24_variant_f_difference_imaging_q5_coadd_highpass_15px_provisional_g1",
+      "static_sources_flagged": 3,
+      "status": "unconfirmed_candidates",
+      "work_estimate": 18118605,
+      "zero_motion_trial_index": 520
+    },
+    "started_at": "2026-11-15 08:32:35",
+    "status": "completed"
+  },
+  {
+    "created_at": "2026-11-15 08:32:45",
+    "error_code": null,
+    "field_id": "f_25faaae4bee9c18ab8c3ce82",
+    "finished_at": "2026-11-15 08:34:20",
+    "job_id": "j_17b3728ff119eef1a80054f5",
+    "kind": "validation",
+    "params": {
+      "background_variant": "f",
+      "field_id": "f_25faaae4bee9c18ab8c3ce82",
+      "frame_window": {
+        "min_time_separation_days": 0.1,
+        "mjd_max": 60847.0,
+        "mjd_min": 60840.0,
+        "wavelength_max_um": 1.2,
+        "wavelength_min_um": 0.74
+      },
+      "label": "demo-bundle",
+      "min_coverage_fraction": 0.5,
+      "n_injections": 20,
+      "noise_model": "per_frame",
+      "seed": 20261115,
+      "snr_max": 40.0,
+      "snr_min": 5.0,
+      "speed_max_arcsec_per_day": 8.0,
+      "speed_min_arcsec_per_day": 1.0
+    },
+    "progress": {
+      "done": 20,
+      "stage": "trial",
+      "total": 21,
+      "warnings": [
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "candidate extraction/static-source handling are PROVISIONAL(G1); D-24 variant f preprocessing applied; static-source heuristic recorded"
+        }
+      ]
+    },
+    "result": {
+      "background_variant": "f",
+      "experiment_id": "exp_9ff656933df8bf4583e39588",
+      "field_id": "f_25faaae4bee9c18ab8c3ce82",
+      "interpolation_order": 1,
+      "job_id": "j_17b3728ff119eef1a80054f5",
+      "match_radius_px": 1.5,
+      "n_missed_truth": 5,
+      "n_preexisting_truth": 0,
+      "n_recovered_truth": 15,
+      "n_spurious_detections": 8,
+      "n_trials": 20,
+      "noise_model": "per_frame",
+      "noise_model_frame_ratios": [
+        1.052753,
+        3.690637,
+        1.079161,
+        2.274502,
+        2.449331
+      ],
+      "partial": false,
+      "position_error": {
+        "max_px": 0.4916074186422486,
+        "median_px": 0.2705153308993764,
+        "n": 15,
+        "p90_px": 0.39207310012228
+      },
+      "precision": 0.6521739130434783,
+      "precision_ci": [
+        0.44890335377263,
+        0.8118872406120227
+      ],
+      "recall": 0.75,
+      "recall_ci": [
+        0.531299122381256,
+        0.8881382985923343
+      ],
+      "reference_time_mjd": 60840.250038,
+      "seed": 20261115,
+      "spurious_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "started_at": "2026-11-15 08:32:45",
+    "status": "completed"
+  }
+]

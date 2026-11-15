@@ -1,0 +1,219 @@
+[
+  {
+    "created_at": "2026-11-15 08:34:21",
+    "error_code": null,
+    "field_id": "f_3c97b611b843ae10d439395a",
+    "finished_at": "2026-11-15 08:34:26",
+    "job_id": "j_8215200b6c6c9c51171ecfaf",
+    "kind": "moving_object_search",
+    "params": {
+      "background_variant": "f",
+      "field_id": "f_3c97b611b843ae10d439395a",
+      "frame_window": {
+        "min_time_separation_days": 0.1,
+        "mjd_max": 61277.9,
+        "mjd_min": 61270.3,
+        "wavelength_max_um": 4.27,
+        "wavelength_min_um": 3.81
+      },
+      "min_coverage_fraction": 0.5,
+      "noise_model": "per_frame"
+    },
+    "progress": {
+      "done": 1041,
+      "stage": "done",
+      "total": 1041,
+      "warnings": [
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "background_variant f requires >= 5 frames; got 3 \u2014 fell back to c"
+        },
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "candidate extraction/static-source handling are PROVISIONAL(G1); D-24 variant c preprocessing applied; static-source heuristic recorded"
+        }
+      ]
+    },
+    "result": {
+      "background_variant": "c",
+      "background_variant_requested": "f",
+      "candidate_ids": [
+        "c_6a1de5617f0ddbbd0c4f33d3",
+        "c_4345296dbaac488b8aed6947",
+        "c_85911c3e7a3179cbc3dbf274",
+        "c_2eb6156e6965721eef4b7cec",
+        "c_e294693bb58a09ac7a3475ec",
+        "c_ffcf13c0161564eef4194583",
+        "c_8a0a5147c3ed83d4e0d73a5f",
+        "c_c5cf54a4eac5120890007f1d",
+        "c_39dfaf78ffbf7eaefcdd2527",
+        "c_c3082d2d633782609e981455",
+        "c_1e6c2ad4db96cd8966744868",
+        "c_238433f50b343150895656be",
+        "c_45f703708692834dc5a27dc9",
+        "c_94fda9bb24bb25cc1861ee37",
+        "c_1756336a4f2183d2dbbfe09e",
+        "c_3a8df322a662e7ba2b4a757b",
+        "c_efb4154aeaa7dc81a9c13f2f",
+        "c_12cb9896d8884a5b030ea8df",
+        "c_f1f466631779108faa264efb",
+        "c_4fcfcd9074b11719516b2e1c",
+        "c_dcc62e28be94fb9c268cf32b",
+        "c_88432c5c26389f66e60786dd",
+        "c_2f3972e6ed9212943b9a9167",
+        "c_7ad017de330378c4cdfa3ef3",
+        "c_7d326bd3709d1b593e705f25"
+      ],
+      "candidates_found": 31,
+      "candidates_persisted": 25,
+      "candidates_truncated": true,
+      "extraction_diagnostic": null,
+      "extraction_method": "provisional_sigma_threshold_nms",
+      "field_id": "f_3c97b611b843ae10d439395a",
+      "frame_window": {
+        "frame_refs": [
+          "qr3.01a0eea8-5429-76cb-8620-14c2e95cd100D5",
+          "qr3.01a0eeab-bf8a-72b3-bca9-e4008de83b27D5",
+          "qr3.01a0eeaf-e4f8-7fd7-8b6d-f1909ae29519D5"
+        ],
+        "max_span_days": null,
+        "min_time_separation_days": 0.1,
+        "mjd_max": 61277.9,
+        "mjd_min": 61270.3,
+        "n_frames_available": 3,
+        "n_frames_requested": null,
+        "n_frames_selected": 3,
+        "n_time_deduplicated": 0,
+        "n_wavelength_dropped": 0,
+        "wavelength_max_um": 4.27,
+        "wavelength_min_um": 3.81
+      },
+      "frames_used": 3,
+      "interpolation_order": 1,
+      "job_id": "j_8215200b6c6c9c51171ecfaf",
+      "model_ran": false,
+      "motion_trials": 1041,
+      "noise_calibration": 3.3373878427971864,
+      "noise_model": "per_frame",
+      "noise_model_frame_ratios": [
+        3.781864,
+        3.109889,
+        3.337388
+      ],
+      "reference_time_mjd": 61273.381672,
+      "stack_pngs_failed": 0,
+      "static_source_handling": "d24_variant_c_highpass_median_15px_provisional_g1",
+      "static_sources_flagged": 23,
+      "status": "unconfirmed_candidates",
+      "work_estimate": 10871163,
+      "zero_motion_trial_index": 520
+    },
+    "started_at": "2026-11-15 08:34:21",
+    "status": "completed"
+  },
+  {
+    "created_at": "2026-11-15 08:34:27",
+    "error_code": null,
+    "field_id": "f_3c97b611b843ae10d439395a",
+    "finished_at": "2026-11-15 08:35:23",
+    "job_id": "j_d1c20b7a538c70fa8ce3299d",
+    "kind": "validation",
+    "params": {
+      "background_variant": "f",
+      "field_id": "f_3c97b611b843ae10d439395a",
+      "frame_window": {
+        "min_time_separation_days": 0.1,
+        "mjd_max": 61277.9,
+        "mjd_min": 61270.3,
+        "wavelength_max_um": 4.27,
+        "wavelength_min_um": 3.81
+      },
+      "label": "demo-bundle",
+      "min_coverage_fraction": 0.5,
+      "n_injections": 20,
+      "noise_model": "per_frame",
+      "seed": 20261115,
+      "snr_max": 40.0,
+      "snr_min": 5.0,
+      "speed_max_arcsec_per_day": 8.0,
+      "speed_min_arcsec_per_day": 1.0
+    },
+    "progress": {
+      "done": 20,
+      "stage": "trial",
+      "total": 21,
+      "warnings": [
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "background_variant f requires >= 5 frames; got 3 \u2014 fell back to c"
+        },
+        {
+          "code": "ORB-RS-PROVISIONAL",
+          "message": "candidate extraction/static-source handling are PROVISIONAL(G1); D-24 variant c preprocessing applied; static-source heuristic recorded"
+        }
+      ]
+    },
+    "result": {
+      "background_variant": "c",
+      "experiment_id": "exp_1988f4f98be675d7987bafdd",
+      "field_id": "f_3c97b611b843ae10d439395a",
+      "interpolation_order": 1,
+      "job_id": "j_d1c20b7a538c70fa8ce3299d",
+      "match_radius_px": 1.5,
+      "n_missed_truth": 1,
+      "n_preexisting_truth": 3,
+      "n_recovered_truth": 16,
+      "n_spurious_detections": 1,
+      "n_trials": 20,
+      "noise_model": "per_frame",
+      "noise_model_frame_ratios": [
+        3.781864,
+        3.109889,
+        3.337388
+      ],
+      "partial": false,
+      "position_error": {
+        "max_px": 0.8954192780360705,
+        "median_px": 0.19454660535007384,
+        "n": 16,
+        "p90_px": 0.6388881899657253
+      },
+      "precision": 0.9375,
+      "precision_ci": [
+        0.7167126242970107,
+        0.9888806552353576
+      ],
+      "recall": 0.9411764705882353,
+      "recall_ci": [
+        0.7301796936242461,
+        0.9895395990150025
+      ],
+      "reference_time_mjd": 61273.381672,
+      "seed": 20261115,
+      "spurious_counts": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "started_at": "2026-11-15 08:34:27",
+    "status": "completed"
+  }
+]
