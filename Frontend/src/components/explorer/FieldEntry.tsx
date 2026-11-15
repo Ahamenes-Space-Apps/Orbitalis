@@ -9,7 +9,6 @@ import { useUi } from '@/store/useUi';
 import { formatDec, formatRa } from '@/lib/format';
 import { parseCoordinates } from '@/lib/parseCoords';
 import { Button } from '@/components/ui/button';
-import { FlowSteps } from '@/components/explorer/FlowSteps';
 import { cn } from '@/lib/utils';
 import type { Preset } from '@/data/types';
 
@@ -134,8 +133,6 @@ export function FieldEntry({ variant = 'landing' }: { variant?: 'landing' | 'dia
           </Button>
         )}
       </div>
-      {variant === 'landing' && <FlowSteps active={1} />}
-
       <section className="flex flex-col gap-4" aria-labelledby="preset-heading">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <div>
