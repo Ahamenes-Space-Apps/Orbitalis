@@ -9,6 +9,7 @@ import { DossierPage } from '@/pages/DossierPage';
 import { MethodsPage } from '@/pages/MethodsPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { LandingPage } from '@/pages/LandingPage';
+import { OnboardingPage } from '@/pages/OnboardingPage';
 
 
 declare global {
@@ -52,6 +53,7 @@ export function App() {
       <UrlStateProvider>
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="onboarding" element={<OnboardingPage />} />
           <Route element={<AppShell />}>
             <Route path="explorer" element={<ExplorerPage />} />
             <Route path="candidates" element={<CandidatesPage />} />

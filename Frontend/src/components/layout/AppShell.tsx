@@ -106,7 +106,7 @@ export function AppShell() {
           className="flex h-full min-w-0 items-stretch overflow-x-auto"
           aria-label="Main"
         >
-          <NavItem to="/explorer" end>
+          <NavItem to="/onboarding" end>
             <span className="sm:hidden">Sky</span>
             <span className="hidden sm:inline">Sky Explorer</span>
           </NavItem>

@@ -6,13 +6,13 @@ const STEPS = [
   {
     title: 'Find a field',
     detail: 'Choose a patch to inspect.',
-    body: 'Start with a preset below. Each one opens a real SPHEREx field with stored observations to explore.',
-    action: 'Choose a field below',
+    body: 'When you enter the Explorer, choose a preset field or enter coordinates for a patch worth inspecting.',
+    action: 'Choose a field in Explorer',
   },
   {
     title: 'Watch the frames',
     detail: 'Compare the sky over time.',
-    body: 'Once a field opens, play the epoch roller and watch the same patch change from frame to frame.',
+    body: 'Play the epoch roller and watch the same patch change from frame to frame using the stored observations.',
     action: 'Use the epoch roller',
   },
   {

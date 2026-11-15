@@ -103,14 +103,14 @@ html.app-mode body::before{display:none;content:none}
     <svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true"><ellipse cx="15" cy="15" rx="13" ry="5.5" transform="rotate(-30 15 15)" stroke="#4260E6" stroke-width="2"/><ellipse cx="15" cy="15" rx="13" ry="5.5" transform="rotate(30 15 15)" stroke="#fff" stroke-width="1.2"/><circle cx="15" cy="15" r="2.6" fill="#fff"/></svg>
     ORBITALS
   </a>
-  <ul><li><a href="#how">How it works</a></li><li><a href="#modes">Features</a></li><li><a href="#explore">Enter a patch</a></li></ul>
+  <ul><li><a href="#how">How it works</a></li><li><a href="#modes">Features</a></li><li><a href="/onboarding">Enter a patch</a></li></ul>
 </nav>
 
 <main>
 <section id="top" data-i="0">
   <h1 class="rise"><span class="o"><i style="--d:.1s">See what</i></span><span><i style="--d:.25s">moves.</i></span></h1>
   <p class="fade" style="margin-top:3vh">Orbitals is a time-aware sky explorer for NASA’s SPHEREx telescope. Pick a patch of sky, drag time, and watch asteroids slide across stars that hold still.</p>
-  <div class="fade" style="transition-delay:.6s"><a class="btn" href="#explore">Explore a patch</a></div>
+  <div class="fade" style="transition-delay:.6s"><a class="btn" href="/onboarding">Explore a patch</a></div>
   <div class="hint">Scroll to enter orbit</div>
 </section>
 
@@ -254,7 +254,7 @@ function read(){var a=parseFloat(ra.value),d=parseFloat(dec.value),f=Math.round(
 function link(v){return "/explorer?ra="+v.a+"&dec="+v.d+"&r="+(v.f/60)}
 function show(){var v=read();out.textContent=typeof v==="string"?v:link(v)}
 [ra,dec,fov].forEach(function(el){el.addEventListener("input",show)});show();
-document.getElementById("f").addEventListener("submit",function(e){e.preventDefault();var v=read();if(typeof v==="string"){out.textContent=v;return}location.assign("/explorer")});
+document.getElementById("f").addEventListener("submit",function(e){e.preventDefault();var v=read();if(typeof v==="string"){out.textContent=v;return}location.assign(link(v))});
 document.getElementById("copy").addEventListener("click",function(){var v=read();if(typeof v==="string"){out.textContent=v;return}var b=this,l=location.origin+link(v);
  try{navigator.clipboard.writeText(l).then(function(){b.textContent="Copied"},function(){out.textContent=l})}catch(x){out.textContent=l}setTimeout(function(){b.textContent="Copy link"},1800)});
 
