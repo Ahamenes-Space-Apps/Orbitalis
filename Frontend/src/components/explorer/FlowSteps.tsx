@@ -63,7 +63,7 @@ export function FlowSteps({
                   className={cn(
                     'grid size-9 shrink-0 place-items-center border font-mono text-[14px]',
                     current || complete
-                      ? 'border-accent bg-accent text-accent-ink'
+                      ? 'border-accent bg-sky text-ink'
                       : 'border-line-2 text-haze',
                   )}
                   aria-hidden="true"
