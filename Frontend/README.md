@@ -33,8 +33,9 @@ ORB_OFFLINE=1 uv run uvicorn orbitalis.main:app --port 8080
 ORB_API_PROXY_TARGET=http://localhost:8080 npm run dev
 ```
 
-`.env.development.local` (gitignored) can hold `VITE_API_URL=/api/v1` for the
-default dev server. The assistant only appears in live mode: mock mode has no
+`.env` sets `VITE_API_URL=/api/v1` for the default dev server and local
+builds; override it per-shell or via build args for other targets. The
+assistant only appears in live mode: mock mode has no
 chat transport, so the control is hidden even if a capability snapshot says it
 is enabled.
 
