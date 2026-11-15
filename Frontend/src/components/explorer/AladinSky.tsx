@@ -72,7 +72,7 @@ export function AladinSky({
           const y = source?.y;
           if (!Number.isFinite(x) || !Number.isFinite(y)) return;
           const selected = source?.data?.selected === true;
-          const color = '#feb832';
+          const color = '#39b8c4';
           const half = selected ? 14 : 10;
           ctx.save();
           ctx.strokeStyle = color;

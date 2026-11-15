@@ -19,7 +19,7 @@ export function ModeBanner({ className }: { className?: string }) {
     : status === 'offline'
       ? 'Archive unavailable. Cached results may still be shown; new requests will retry.'
       : status === 'degraded'
-        ? 'Some observations could not be downloaded. Results use the rest.'
+        ? 'Archive connection is degraded.'
         : null;
 
   useEffect(() => {

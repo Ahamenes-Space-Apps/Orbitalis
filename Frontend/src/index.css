@@ -12,87 +12,87 @@
 :root {
   color-scheme: light;
 
-  --canvas: #f3f0e8;
-  --panel: #fbfaf5;
-  --panel-2: #e6ece9;
+  --canvas: #f4f6f7;
+  --panel: #ffffff;
+  --panel-2: #e8edf0;
 
-  --line: #cbd6d4;
-  --line-2: #95aba8;
+  --line: #ced8dd;
+  --line-2: #9baab2;
 
-  --ink: #07111f;
-  --mist: #27404a;
-  --haze: #5a7076;
+  --ink: #151a20;
+  --mist: #34434d;
+  --haze: #687984;
 
-  --accent: #f2b84b;
-  --accent-2: #74d7d0;
-  --accent-soft: #f9e6b8;
-  --accent-soft-ink: #76500a;
-  --accent-ink: #07111f;
+  --accent: #39b8c4;
+  --accent-2: #e76f51;
+  --accent-soft: #dff4f5;
+  --accent-soft-ink: #0e6971;
+  --accent-ink: #081014;
 
-  --violet: #596fa8;
-  --ok: #267d79;
-  --danger: #b64d3c;
+  --violet: #6d7c89;
+  --ok: #2d8c7a;
+  --danger: #b7413d;
 
-  --sky: #07111f;
-  --sky-line: #2b4557;
-  --sky-line-2: #496679;
+  --sky: #111820;
+  --sky-line: #364752;
+  --sky-line-2: #526873;
 
   --chart-bg: var(--panel);
   --chart-grid: var(--line);
   --chart-axis: var(--line-2);
   --chart-text: var(--haze);
-  --chart-detected: #267d79;
-  --chart-limit: #b64d3c;
-  --chart-masked: #82969a;
-  --chart-1: #267d79;
-  --chart-2: #596fa8;
-  --chart-3: #d18d21;
-  --chart-4: #b64d3c;
-  --chart-5: #3d8f9a;
-  --chart-6: #7d5b9d;
+  --chart-detected: #39b8c4;
+  --chart-limit: #e76f51;
+  --chart-masked: #82929b;
+  --chart-1: #39b8c4;
+  --chart-2: #e76f51;
+  --chart-3: #6d7c89;
+  --chart-4: #2d8c7a;
+  --chart-5: #5aa1c0;
+  --chart-6: #b278a9;
 }
 
 .dark {
   color-scheme: dark;
 
-  --canvas: #07111f;
-  --panel: rgb(13 29 50 / 0.88);
-  --panel-2: rgb(20 40 66 / 0.9);
+  --canvas: #151a20;
+  --panel: rgb(27 36 43 / 0.94);
+  --panel-2: rgb(35 47 56 / 0.96);
 
-  --line: rgb(180 211 216 / 0.18);
-  --line-2: rgb(180 211 216 / 0.42);
+  --line: rgb(200 220 224 / 0.18);
+  --line-2: rgb(200 220 224 / 0.42);
 
-  --ink: #f3f0e8;
-  --mist: #c9dadc;
-  --haze: #9cb2b7;
+  --ink: #f4f6f7;
+  --mist: #c9d5d8;
+  --haze: #9eafb6;
 
-  --accent: #f2b84b;
-  --accent-2: #74d7d0;
-  --accent-soft: rgb(242 184 75 / 0.18);
-  --accent-soft-ink: #f5d795;
-  --accent-ink: #07111f;
+  --accent: #39b8c4;
+  --accent-2: #e76f51;
+  --accent-soft: rgb(57 184 196 / 0.18);
+  --accent-soft-ink: #a9eef1;
+  --accent-ink: #081014;
 
-  --violet: #aebcf1;
-  --ok: #74d7d0;
-  --danger: #e77a62;
+  --violet: #b2bec6;
+  --ok: #78d8c5;
+  --danger: #f08b79;
 
-  --sky: #050c16;
-  --sky-line: #2b4557;
-  --sky-line-2: #496679;
+  --sky: #0d1319;
+  --sky-line: #364752;
+  --sky-line-2: #526873;
 
   --chart-bg: #101018;
   --chart-grid: var(--line);
   --chart-axis: var(--line-2);
   --chart-text: var(--haze);
-  --chart-detected: #74d7d0;
-  --chart-limit: #f2b84b;
-  --chart-masked: #6f8892;
-  --chart-1: #74d7d0;
-  --chart-2: #aebcf1;
-  --chart-3: #f2b84b;
-  --chart-4: #e77a62;
-  --chart-5: #76b9d0;
-  --chart-6: #d5a6ed;
+  --chart-detected: #39b8c4;
+  --chart-limit: #e76f51;
+  --chart-masked: #70818b;
+  --chart-1: #39b8c4;
+  --chart-2: #e76f51;
+  --chart-3: #b2bec6;
+  --chart-4: #78d8c5;
+  --chart-5: #76bdd0;
+  --chart-6: #d3a1c6;
 }
 
 @theme inline {
@@ -201,6 +201,7 @@ pre {
 }
 
 .cosmic-canvas h1 {
+  text-transform: uppercase;
   letter-spacing: -0.04em;
   line-height: 0.95;
   font-weight: 700;
@@ -224,19 +225,18 @@ pre {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(circle at 23% 32%, rgb(242 184 75 / 0.92) 0 1px, transparent 2px),
-    radial-gradient(circle at 71% 24%, rgb(116 215 208 / 0.85) 0 1px, transparent 2px),
-    radial-gradient(circle at 63% 72%, rgb(243 240 232 / 0.8) 0 1px, transparent 2px),
-    radial-gradient(circle at 38% 78%, rgb(116 215 208 / 0.65) 0 0.8px, transparent 1.7px),
-    linear-gradient(135deg, #0b1b2c, #07111f 56%, #142f42);
-  background-size: auto, auto, auto, auto, 100% 100%;
+    radial-gradient(circle at 22% 28%, rgb(57 184 196 / 0.9) 0 1px, transparent 2px),
+    radial-gradient(circle at 72% 24%, rgb(231 111 81 / 0.85) 0 1px, transparent 2px),
+    radial-gradient(circle at 64% 72%, rgb(244 246 247 / 0.8) 0 1px, transparent 2px),
+    radial-gradient(circle at 38% 78%, rgb(57 184 196 / 0.65) 0 0.8px, transparent 1.7px),
+    linear-gradient(135deg, #1c3038, #111820 56%, #27343d);
 }
 
 .field-preview-fallback::after {
   position: absolute;
   inset: 18% 14%;
   content: '';
-  border: 1px solid rgb(116 215 208 / 0.3);
+  border: 1px solid rgb(57 184 196 / 0.3);
   transform: rotate(-14deg);
 }
 
@@ -246,7 +246,7 @@ pre {
   inset: 50% auto auto 50%;
   width: 30px;
   height: 30px;
-  border: 1px solid rgb(242 184 75 / 0.65);
+  border: 1px solid rgb(231 111 81 / 0.65);
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
@@ -256,8 +256,16 @@ pre {
   width: 44px;
   height: 1px;
   border: 0;
-  border-top: 1px solid rgb(242 184 75 / 0.4);
+  border-top: 1px solid rgb(231 111 81 / 0.4);
   border-radius: 0;
+}
+
+.flow-deck {
+  scrollbar-width: none;
+}
+
+.flow-deck::-webkit-scrollbar {
+  display: none;
 }
 
 .app-panel {
@@ -484,7 +492,3 @@ pre {
     transition-duration: 0.01ms !important;
   }
 }
-
-/* Keep utility labels readable without making the data canvas feel loud. */
-.cosmic-canvas .text-\[10px\] { font-size: 0.6875rem; }
-.cosmic-canvas .text-\[11px\] { font-size: 0.75rem; }

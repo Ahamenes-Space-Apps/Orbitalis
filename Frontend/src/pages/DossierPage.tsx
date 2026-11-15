@@ -36,7 +36,7 @@ function Stat({
 }) {
   return (
     <div className="min-w-[180px] flex-1 border border-line bg-panel px-4 py-3.5">
-      <div className="font-mono text-[10px] tracking-[0.16em] text-haze uppercase">{label}</div>
+      <div className="text-[12px] font-medium text-haze">{label}</div>
       <div className="mt-1.5 font-mono text-[26px] leading-tight text-ink">{value}</div>
       <div className="mt-1 text-[12px] text-mist">{sub}</div>
     </div>
@@ -179,7 +179,7 @@ export function DossierPage() {
       className="mx-auto flex w-full max-w-[1280px] flex-col gap-5 bg-transparent px-4 pt-6 pb-14 sm:px-6"
     >
       <Link
-        to={{ pathname: '/', search: values.f ? `?f=${encodeURIComponent(values.f)}` : '' }}
+        to={{ pathname: '/explorer', search: values.f ? `?f=${encodeURIComponent(values.f)}` : '' }}
         data-html2canvas-ignore
         className="inline-flex min-h-11 w-fit items-center gap-2 text-sm no-underline hover:underline"
       >
@@ -189,7 +189,7 @@ export function DossierPage() {
 
       <section className="flex flex-wrap items-end justify-between gap-6 border-b border-line pb-5">
         <div className="flex min-w-0 flex-col gap-3">
-          <div className="app-kicker">CANDIDATE DOSSIER</div>
+          <div className="app-kicker">Candidate dossier</div>
           <h1 className="m-0 text-[34px] leading-[1.05] font-bold tracking-tight sm:text-[52px]">
             Candidate {formatId(candidate.ordinal)}
           </h1>
@@ -209,8 +209,8 @@ export function DossierPage() {
 
         <div className="flex flex-wrap items-end gap-x-10 gap-y-6">
           <div className="flex flex-col gap-1">
-            <div className="font-mono text-[10px] tracking-[0.16em] text-haze uppercase">
-              {candidate.rank_value.basis === 'model_score' ? 'MODEL SCORE' : 'STACK SNR'}
+            <div className="font-mono text-[11px] text-haze">
+              {candidate.rank_value.basis === 'model_score' ? 'Model score' : 'Stack SNR'}
             </div>
             <div className="font-mono text-[48px] leading-none font-medium text-accent">
               {candidate.rank_value.basis === 'model_score'
@@ -233,37 +233,34 @@ export function DossierPage() {
         </p>
       </div>
 
-      <section className="border-l-2 border-accent bg-accent-soft/60 px-4 py-4" aria-labelledby="plain-summary-heading">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <h2 id="plain-summary-heading" className="m-0 text-[17px] font-semibold">What we see</h2>
-          <Badge tone="amber">Unconfirmed</Badge>
-        </div>
+      <section className="border-l-2 border-accent bg-accent-soft px-4 py-4" aria-labelledby="plain-summary-heading">
+        <h2 id="plain-summary-heading" className="m-0 text-[17px] font-semibold">What we know so far</h2>
         <p className="m-0 mt-2 max-w-[72ch] text-[14px] leading-relaxed text-mist">
           {moving
             ? `Candidate ${formatId(candidate.ordinal)} moved ${formatArcsec(metrics.shiftArcsec)} over ${metrics.baseline.toFixed(1)} days across ${frameCount} stored frames.`
             : `Candidate ${formatId(candidate.ordinal)} is marked as a static-source flag across ${metrics.baseline.toFixed(1)} days of stored positions.`}{' '}
-          Compare the original frames before any follow-up claim.
+          Review the original frames before any follow-up claim.
         </p>
       </section>
 
       <section className="flex flex-wrap gap-4" aria-label="Key numbers">
         <Stat
-          label="STACK SNR"
+          label="Stack SNR"
           value={formatSnr(candidate.stack_snr)}
           sub="combined-image significance along this path"
         />
         <Stat
-          label="MOTION"
+          label="Motion"
           value={formatRate(metrics.rate)}
           sub={formatPositionAngle(metrics.angle)}
         />
         <Stat
-          label="BASELINE"
+          label="Baseline"
           value={`${metrics.baseline.toFixed(1)} days`}
           sub={`${frameCount} frame${frameCount === 1 ? '' : 's'} on track`}
         />
         <Stat
-          label="SHIFT OVER BASELINE"
+          label="Shift over baseline"
           value={formatArcsec(metrics.shiftArcsec)}
           sub={
             metrics.shiftPx === null
@@ -273,7 +270,7 @@ export function DossierPage() {
         />
         {rankingEnabled && candidate.model_score && (
           <Stat
-            label="MODEL SCORE"
+            label="Model score"
             value={formatScore(candidate.model_score.value)}
             sub={`prediction · ${candidate.model_score.model_version}`}
           />
@@ -285,7 +282,6 @@ export function DossierPage() {
         field={fieldData}
         variant="pane"
         hideHeader
-        hideSummary
         readOnlyWavelength
         className="w-full border border-line bg-panel"
       />
@@ -306,15 +302,21 @@ export function DossierPage() {
         </div>
       </section>
 
-      <section data-html2canvas-ignore className="flex flex-wrap items-center justify-between gap-4 border border-accent/50 bg-accent-soft/50 px-4 py-4">
+      <section
+        data-html2canvas-ignore
+        className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4"
+        aria-labelledby="next-action-heading"
+      >
         <div>
-          <h2 className="m-0 text-[15px] font-semibold">Ready to share?</h2>
-          <p className="m-0 mt-1 text-[13px] leading-relaxed text-mist">
-            Export this candidate dossier with the stored images and measurements.
+          <h2 id="next-action-heading" className="m-0 text-[15px] font-semibold">
+            Next action
+          </h2>
+          <p className="m-0 mt-1 text-[12px] text-haze">
+            Keep the evidence together for review or follow-up.
           </p>
         </div>
         <div className="flex flex-col items-end gap-1.5">
-          <Button onClick={() => void exportReport()} disabled={exporting}>
+          <Button variant="outline" onClick={() => void exportReport()} disabled={exporting}>
             <Download className="size-4" aria-hidden="true" />
             {exporting ? 'Exporting…' : 'Export report'}
           </Button>
