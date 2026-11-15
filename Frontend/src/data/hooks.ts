@@ -42,7 +42,18 @@ export const useCapabilities = () =>
   useQuery({ queryKey: keys.capabilities, queryFn: api.capabilities, staleTime: Infinity });
 
 export const usePresets = () =>
-  useQuery({ queryKey: keys.presets, queryFn: api.presets, staleTime: Infinity });
+  useQuery({
+    queryKey: keys.presets,
+    queryFn: api.presets,
+    staleTime: Infinity,
+    select: (envelope) => ({
+      ...envelope,
+      data: {
+        ...envelope.data,
+        presets: envelope.data.presets.filter((preset) => preset.name !== 'tutorial'),
+      },
+    }),
+  });
 
 export const useReleases = () =>
   useQuery({ queryKey: keys.releases, queryFn: api.releases, staleTime: Infinity });
