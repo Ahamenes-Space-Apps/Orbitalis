@@ -1,0 +1,151 @@
+# Curated demo fields (SDD §5.1, §6.7).
+# Populated by the team; each preset also gets an entry in demo_bundle/.
+# bake_demo.py merges global search params into both jobs. A preset may add:
+#   params:      shared by search AND validation (frame selection, motion
+#                grid, thresholds, background variant) — use this for
+#                frame_window/frame_refs so both jobs run on identical frames
+#   search:      search-job-only overrides
+#   validation:  validation-job-only overrides (e.g. n_injections)
+#   field:       fetch-level filter applied BEFORE cutout download
+#                (mjd_start/mjd_end, detectors: [1..6]) — keeps the bake
+#                from downloading bands the frame_window will discard
+#   Revisit cadence varies by field: frame_window.min_time_separation_days
+#   (default 0.1 d) collapses near-simultaneous exposures into one effective
+#   epoch and may be overridden per preset.
+#   - name: r-dra
+#     ra: ...
+#     params:
+#       frame_window: {max_span_days: 7, n_frames: 60}  # dense/multi-epoch field
+#     validation:
+#       n_injections: 10
+
+presets:
+  - name: tutorial
+    ra: 156.09
+    dec: -41.64
+    radius_deg: 0.05
+    release: qr2
+    # Fetch only detector 1 (~0.75-1.12 um): matches the frame_window below
+    # and cuts the bake from ~454 cutouts to ~75.
+    field:
+      detectors: [1]
+    # RS.08 finding: all stored frames span 36 days x 0.75-4.97 um —
+    # violates both stack-policy caps. Band 1 (detector 1, ~0.75-1.12 um)
+    # fits the 0.5 um wavelength cap. mjd bounds pick the 60840-60846
+    # cluster: 11 stored frames over a 6.0-day baseline — the densest-window
+    # criterion alone chose a 0.8-day clump where movers drift <1 px and
+    # difference imaging erases them (recall 0.0 on the first bake).
+    # min_time_separation_days: those 11 frames are only 5 visits (pairs/quads
+    # 2 min-1.6 h apart); without dedup the mover joins its own
+    # difference-imaging coadd (D-24 ghost trail) and the visit's wavelength
+    # sweep (0.75->0.77, 1.05->1.12 um) mixes channels. Dedup keeps the
+    # earliest exposure of each visit -> 5 epochs, one channel per visit.
+    params:
+      frame_window: {wavelength_min_um: 0.74, wavelength_max_um: 1.20, mjd_min: 60840.0, mjd_max: 60847.0, min_time_separation_days: 0.1}
+    why: SPHEREx tutorial field; dense QR2 coverage for first paint.
+
+  # Challenge targets (UX doc). Coordinates are epoch ~J2026.0, computed
+  # from J2000 + proper motion — the high-PM objects move several arcminutes
+  # since J2000, so do NOT "fix" these back to catalogue J2000 values.
+  # TODO(team): verify epoch/coordinates against the actual SPHEREx epochs
+  # and confirm release coverage before the live bake.
+  - name: barnards-star
+    ra: 269.4463
+    dec: 4.7682
+    # X-13 known-object overlay: position is this preset's epoch-J2026.0
+    # centre (the namesake object). Static — no proper-motion path yet.
+    known_object: {name: "Barnard's Star", type: "star"}
+    radius_deg: 0.05
+    release: qr3
+    field:
+      # RS.08 bake-off (2026-11-12): D2 gave recall 0.0 (noise_calibration 4.1,
+      # star residuals); D3 gave 0.16 (noise_cal 30.7); D5 gives recall 0.94 /
+      # precision 0.94 but only 3 frames (variant C, 31 real-source candidates).
+      # D5 kept: best validated recall; thin frame count documented as caveat.
+      detectors: [5]
+      mjd_start: 61270.3
+      mjd_end: 61277.9
+    params:
+      frame_window: {wavelength_min_um: 3.81, wavelength_max_um: 4.27, mjd_min: 61270.3, mjd_max: 61277.9, min_time_separation_days: 0.1}
+    why: Highest proper-motion star (~10.3 arcsec/yr); moves ~0.03 arcsec/day,
+      under the static-source threshold. Baked on detector 5 (best of three
+      detectors tried — see the field comment) — validation recall 0.94 but on
+      only 3 frames/variant C, and the ~31 candidates are mostly real static
+      sources in this crowded field (25-cap truncation applies). Treat the
+      recall as best-of-three, not unbiased.
+  - name: epsilon-indi-b
+    ra: 331.0966
+    dec: -56.8006
+    # X-13 known-object overlay: position is this preset's epoch-J2026.0
+    # centre (the namesake object). Static — no proper-motion path yet.
+    known_object: {name: "Epsilon Indi B", type: "brown dwarf"}
+    radius_deg: 0.05
+    release: qr3
+    # RS.08 probe: 120 QR3 frames but NO detector 1 or 4 coverage; detector 3
+    # has 36 fr ~10 epochs in the densest 7d run @61305.2.
+    field:
+      detectors: [3]
+      mjd_start: 61304.7
+      mjd_end: 61312.2
+    params:
+      frame_window: {wavelength_min_um: 1.63, wavelength_max_um: 2.09, mjd_min: 61304.7, mjd_max: 61312.2, min_time_separation_days: 0.1}
+    why: Epsilon Indi Ba brown dwarf (~53 Mjup), ~3.6 pc; offset from Ind A.
+  - name: wise-0855
+    ra: 133.7360
+    dec: -7.2403
+    # X-13 known-object overlay: position is this preset's epoch-J2026.0
+    # centre (the namesake object). Static — no proper-motion path yet.
+    known_object: {name: "WISE 0855-0714", type: "Y dwarf"}
+    radius_deg: 0.05
+    release: qr2  # X-11: 256 QR2 frames, 0 QR3 — QR3 has no coverage here
+    # RS.08 probe: 256 QR2 frames over 373d; detector 2 densest 7d run is
+    # only 19 fr ~5 epochs @60986.2 — the sparsest viable field; variant E
+    # sits exactly at its 5-frame minimum here.
+    field:
+      detectors: [2]
+      mjd_start: 60985.5
+      mjd_end: 60992.5
+    params:
+      frame_window: {wavelength_min_um: 1.08, wavelength_max_um: 1.56, mjd_min: 60985.5, mjd_max: 60992.5, min_time_separation_days: 0.1}
+    why: WISE 0855-0714 Y-dwarf (~250 K), ~2.3 pc, ~8 arcsec/yr proper motion;
+      same static-flag expectation as Barnard's Star.
+  - name: rw-aur
+    ra: 76.9565
+    dec: 30.4014
+    # X-13 known-object overlay: position is this preset's epoch-J2026.0
+    # centre (the namesake object). Static — no proper-motion path yet.
+    known_object: {name: "RW Aurigae", type: "T Tauri binary"}
+    radius_deg: 0.05
+    release: qr3
+    # RS.08 probe: 109 QR3 frames over 15d, ~18/detector; detector 5 densest
+    # 7d run 19 fr ~6 epochs @61293.4.
+    field:
+      detectors: [5]
+      mjd_start: 61292.9
+      mjd_end: 61300.4
+    params:
+      frame_window: {wavelength_min_um: 3.81, wavelength_max_um: 4.27, mjd_min: 61292.9, mjd_max: 61300.4, min_time_separation_days: 0.1}
+    why: RW Aurigae A/B T Tauri binary with episodic dimming; slow mover.
+  - name: r-dra
+    ra: 248.1678
+    dec: 66.7550
+    # X-13 known-object overlay: position is this preset's epoch-J2026.0
+    # centre (the namesake object). Static — no proper-motion path yet.
+    known_object: {name: "R Draconis", type: "Mira variable"}
+    radius_deg: 0.05
+    release: qr3
+    # X-11 measured: 723 QR3 frames total, densest 7-day window = 167 —
+    # over ORB-RS-003. max_span_days picks that densest <=7d epoch-compliant
+    # run, n_frames thins it to fit the work budget. Tune n_frames against
+    # the real motion-grid trial count at bake time.
+    # RS.08 probe (post TAP fix): only detectors 1 and 4 cover this position
+    # (360+363 QR3 frames); detector 1 densest 7d run = 83 fr ~14 epochs
+    # @61273.3 — dedup at 0.1d keeps ~14 epochs; n_frames is a safety cap.
+    field:
+      detectors: [1]
+      mjd_start: 61272.8
+      mjd_end: 61280.5
+    params:
+      frame_window: {wavelength_min_um: 0.74, wavelength_max_um: 1.20, mjd_min: 61272.8, mjd_max: 61280.5, min_time_separation_days: 0.1, n_frames: 40}
+    why: R Draconis Mira variable; densest QR3 field (723 frames) — the
+      field/window above keeps search and validation under ORB-RS-003.

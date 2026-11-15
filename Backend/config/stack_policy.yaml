@@ -1,0 +1,9 @@
+# Frame-combination policy for shift-and-stack and grouping (SDD §6.9, D-14).
+# Values are owned by the ML team (D-14) and are data, not code.
+# PROVISIONAL(G1): G1 provisional values pending ML measurement/approval.
+
+same_release: true  # TODO(ML): G1 provisional value pending ML measurement/approval
+same_detector: false  # TODO(ML): G1 provisional value pending ML measurement/approval
+epoch_gap_days: 20  # PROVISIONAL(G1): a longer gap starts a new epoch; TODO(ML): confirm with ML
+max_time_span_days: 7  # PROVISIONAL(G1); TODO(ML): confirm with ML
+max_wavelength_span_um: 0.5  # PROVISIONAL(G1); TODO(ML): confirm with ML

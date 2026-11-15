@@ -1,0 +1,63 @@
+# Planet X hypothesis overlays (SDD D-04).
+#
+# Each entry is a *published probability region* on the sky — a hypothesis,
+# never an observation. Regions are tens of degrees across; fields are
+# ~0.1 deg, so most fields fall outside them. `contains_field` tells the
+# client whether the field's centre sits inside the region.
+#
+# Only regions verified against the cited papers are included. Anything
+# not verified stays a text note, not a shape. `as_of` dates the
+# constraint; later surveys (e.g. Brown, Holman & Batygin 2024) have
+# tightened the allowed parameter space, so treat 2016-era regions as
+# historical, not current.
+#
+# Expected apparent motion (verified calculation, circular-orbit approx):
+# at d AU the annual-parallax amplitude is 206265/d arcsec and the peak
+# reflex rate is that amplitude x 2pi/yr. At 500 AU: ~6.9 arcmin
+# amplitude, ~7.1 arcsec/day peak, plus <=0.3 arcsec/day of the object's
+# own Keplerian motion -> ~7.4 arcsec/day total. Across 400-800 AU the
+# peak is ~4.6-9.3 arcsec/day, bracketing the top of the 1-8 arcsec/day
+# search range; inside ~350 AU it exceeds the range.
+#
+# shape types:
+#   box:    {type: box, ra_min, ra_max, dec_min, dec_max}  (deg; ra_min>ra_max wraps 0h)
+#   circle: {type: circle, ra, dec, radius_deg}            (deg, great-circle radius)
+#   null:   text note only (no drawable region)
+
+as_of: "2024"
+scope_note: "2016-era regions; later surveys tightened the constraints"
+note: "hypothesis, not an observation; this tool makes no claim of detecting such an object"
+
+regions:
+  - id: millholland-laughlin-2016
+    label: "Millholland & Laughlin 2016 (arXiv:1612.07774)"
+    citation: "Millholland & Laughlin 2016, arXiv:1612.07774"
+    as_of: "2016"
+    shape:
+      type: box
+      ra_min: 30.0
+      ra_max: 50.0
+      dec_min: -20.0
+      dec_max: 20.0
+    detail: "densest cluster near RA ~30 deg, Dec ~-10 deg"
+
+  - id: holman-payne-2016
+    label: "Holman & Payne 2016"
+    citation: "Holman & Payne 2016, as cited by Millholland & Laughlin 2016; unverified - the paper names example positions but gives no most-likely centre or extent"
+    as_of: "2016"
+    shape: null
+    detail: "Millholland & Laughlin attribute a favoured region near RA ~40 deg, Dec ~-15 deg to this work; unverified, shown as note only"
+
+  - id: brown-batygin-2016
+    label: "Brown & Batygin 2016"
+    citation: "Brown & Batygin 2016, as cited; RA ~30-90 deg largely unsurveyed, no Dec bounds verified"
+    as_of: "2016"
+    shape: null
+    detail: "RA ~30-90 deg reported as largely unsurveyed; no verified Dec bounds, shown as note only"
+
+  - id: brown-holman-batygin-2024
+    label: "Brown, Holman & Batygin 2024 (Pan-STARRS1)"
+    citation: "Brown, Holman & Batygin 2024, arXiv:2401.17977"
+    as_of: "2024"
+    shape: null
+    detail: "no RA/Dec polygon published; with ZTF and DES about 78% of the reference parameter space is ruled out"

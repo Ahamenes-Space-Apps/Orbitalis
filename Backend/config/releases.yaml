@@ -1,0 +1,13 @@
+# SPHEREx data releases exposed by GET /releases (SDD §8.2).
+# Release identifiers and filtering semantics are open item D-10.
+
+releases:
+  - id: qr2
+    label: Quick Release 2
+    enabled: true
+  - id: qr3
+    label: Quick Release 3
+    enabled: true
+  # DR1 (Data Release 1) is live on IRSA since 2026-11 and replaced the
+  # spherex_qr2 DIDs; parse_release does not yet learn the dr1 DID shape,
+  # so dr1 is not exposed here yet (SDD D-01 follow-up).
