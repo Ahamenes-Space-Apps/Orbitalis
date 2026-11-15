@@ -128,7 +128,7 @@ export function CandidateQueue({
   const filters: Array<{ id: Filter; label: string; count: number }> = [
     { id: 'all', label: 'All', count: counts.all },
     { id: 'moving', label: 'Moving', count: counts.moving },
-    { id: 'flux', label: 'Flux Δ', count: counts.flux },
+    { id: 'flux', label: 'Flux change', count: counts.flux },
     { id: 'top', label: 'Top', count: counts.top },
   ];
 
@@ -332,7 +332,7 @@ export function CandidateQueue({
         {showSkyControls && (
           <>
             <div className="flex items-center justify-between gap-2">
-              <span className="text-[10px] font-semibold tracking-[0.14em] text-haze uppercase">
+              <span className="text-[12px] font-semibold text-haze">
                 Sky layers
               </span>
               <label className="flex items-center gap-1.5 text-[10px] text-haze">

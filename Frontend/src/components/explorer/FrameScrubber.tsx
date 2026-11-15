@@ -78,6 +78,14 @@ export function FrameScrubber({
     !wavelengthRange || inWavelengthRange(frame.wavelength_um, wavelengthRange);
   const index = ordered.findIndex((frame) => frame.frame_ref === selectedRef);
   const selected = index >= 0 ? ordered[index] : (ordered[0] ?? null);
+  const timeMin = ordered.length > 0 ? Math.min(...ordered.map((frame) => frame.mjd)) : 0;
+  const timeMax = ordered.length > 0 ? Math.max(...ordered.map((frame) => frame.mjd)) : 0;
+  const fractionFor = (frame: Frame, frameIndex: number) => {
+    if (order !== 'time' || timeMax === timeMin) {
+      return ordered.length > 1 ? frameIndex / (ordered.length - 1) : 0;
+    }
+    return (frame.mjd - timeMin) / (timeMax - timeMin);
+  };
 
   useEffect(() => {
     if (!playing || ordered.length < 2) return;
@@ -106,10 +114,16 @@ export function FrameScrubber({
     if (!rect || rect.width === 0 || ordered.length === 0) return 0;
     const fraction = (clientX - rect.left) / rect.width;
     const clamped = Math.min(1, Math.max(0, fraction));
-    return Math.min(
-      ordered.length - 1,
-      Math.round(clamped * (ordered.length - 1)),
-    );
+    let nearest = 0;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+    ordered.forEach((frame, frameIndex) => {
+      const distance = Math.abs(fractionFor(frame, frameIndex) - clamped);
+      if (distance < nearestDistance) {
+        nearest = frameIndex;
+        nearestDistance = distance;
+      }
+    });
+    return nearest;
   };
 
   const scrubTo = (clientX: number) => {
@@ -119,8 +133,7 @@ export function FrameScrubber({
     }
   };
 
-  const knobFraction =
-    ordered.length > 1 ? Math.max(0, index < 0 ? 0 : index) / (ordered.length - 1) : 0;
+  const knobFraction = selected ? fractionFor(selected, Math.max(0, index)) : 0;
 
   // Curved timeline: a quadratic arc whose tick marks and knob sit on the
   // curve. Dragging maps the pointer's x position to the nearest frame.
@@ -413,7 +426,7 @@ export function FrameScrubber({
                 strokeLinecap="round"
               />
               {ordered.map((frame, tickIndex) => {
-                const t = ordered.length > 1 ? tickIndex / (ordered.length - 1) : 0;
+                const t = fractionFor(frame, tickIndex);
                 const point = arcPointAtLength(t);
                 const normal = arcNormal(t);
                 const active = frame.frame_ref === selected?.frame_ref;
@@ -483,17 +496,17 @@ export function FrameScrubber({
             </svg>
           </div>
           <div className="relative flex items-start justify-between gap-3 font-mono text-[10px] text-haze">
-            <span className="pt-0.5 uppercase">
+            <span className="pt-0.5">
               {order === 'time' ? formatMjdUtcShortDay(mjdMin) : formatWavelength(waveMin)}
             </span>
             {selected && (
               <div className="absolute left-1/2 -translate-x-1/2 text-center">
-                <div className="text-[13px] font-semibold uppercase tracking-wider text-mist">
+                <div className="text-[13px] font-semibold tracking-[0.04em] text-mist">
                   {order === 'time'
                     ? formatMjdUtcDay(selected.mjd)
                     : formatWavelength(selected.wavelength_um)}
                 </div>
-                <div className="text-[10px] uppercase tracking-widest text-haze">
+                <div className="text-[11px] tracking-[0.04em] text-haze">
                   {order === 'time'
                     ? formatMjdUtcTime(selected.mjd)
                     : `frame ${(index < 0 ? 0 : index) + 1} of ${ordered.length}`}
@@ -505,7 +518,7 @@ export function FrameScrubber({
                 </div>
               </div>
             )}
-            <span className="pt-0.5 text-right uppercase">
+            <span className="pt-0.5 text-right">
               {order === 'time' ? formatMjdUtcShortDay(mjdMax) : formatWavelength(waveMax)}
             </span>
           </div>

@@ -87,7 +87,7 @@ export function LayerPanel({
   return (
     <div className="flex min-h-0 w-full flex-col gap-4 overflow-y-auto border-l border-line bg-bar p-3 text-[12px]">
       <section className="flex flex-col gap-2" aria-labelledby="layers-heading">
-        <h2 id="layers-heading" className="m-0 text-[11px] font-semibold tracking-[0.14em] text-haze uppercase">
+        <h2 id="layers-heading" className="m-0 text-[12px] font-semibold text-haze">
           Layers
         </h2>
         {rows.map((row) => (
@@ -117,7 +117,7 @@ export function LayerPanel({
       </section>
 
       <section className="flex flex-col gap-2 border-t border-line pt-3" aria-labelledby="view-heading">
-        <h2 id="view-heading" className="m-0 text-[11px] font-semibold tracking-[0.14em] text-haze uppercase">
+        <h2 id="view-heading" className="m-0 text-[12px] font-semibold text-haze">
           Sky view
         </h2>
         <div className="flex overflow-hidden rounded-lg border border-line-2" role="group" aria-label="Sky view">
@@ -152,7 +152,7 @@ export function LayerPanel({
         <div className="flex items-baseline justify-between gap-2">
           <h2
             id="wavelength-heading"
-            className="m-0 text-[11px] font-semibold tracking-[0.14em] text-haze uppercase"
+            className="m-0 text-[12px] font-semibold text-haze"
           >
             Wavelength coverage
           </h2>
@@ -171,7 +171,7 @@ export function LayerPanel({
 
       <section className="flex flex-col gap-2 border-t border-line pt-3" aria-labelledby="motion-heading">
         <div className="flex items-center justify-between gap-2">
-          <h2 id="motion-heading" className="m-0 text-[11px] font-semibold tracking-[0.14em] text-haze uppercase">
+          <h2 id="motion-heading" className="m-0 text-[12px] font-semibold text-haze">
             Motion
           </h2>
           <Button variant="ghost" size="sm" onClick={() => onExaggeration(1)} aria-label="Show true motion">

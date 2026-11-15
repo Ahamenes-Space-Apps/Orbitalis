@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { ListFilter, RefreshCw, X } from 'lucide-react';
+import { ArrowRight, ListFilter, Pause, Play, RefreshCw, X } from 'lucide-react';
 import { api } from '@/data/api';
 import { ApiError } from '@/data/errors';
 import {
@@ -147,7 +147,7 @@ function SkyPointPanel({
       </div>
 
       <div className="mt-3 flex flex-col gap-2">
-        <h3 className="m-0 text-[11px] font-semibold tracking-[0.12em] text-haze uppercase">
+        <h3 className="m-0 text-[12px] font-semibold text-haze">
           Light curve here
         </h3>
         {lightcurve.isLoading && <Skeleton className="h-24 w-full" />}
@@ -162,7 +162,7 @@ function SkyPointPanel({
       </div>
 
       <div className="mt-3 border-t border-line pt-2">
-        <h3 className="m-0 mb-1 text-[11px] font-semibold tracking-[0.12em] text-haze uppercase">
+        <h3 className="m-0 mb-1 text-[12px] font-semibold text-haze">
           Spectrum
         </h3>
         {spectrum.data ? (
@@ -170,6 +170,68 @@ function SkyPointPanel({
         ) : (
           <p className="m-0 text-[11px] text-haze">Checking the spectrum…</p>
         )}
+      </div>
+    </div>
+  );
+}
+
+function ExplorerFlow({
+  hasFrames,
+  playing,
+  selected,
+  onPlay,
+}: {
+  hasFrames: boolean;
+  playing: boolean;
+  selected: boolean;
+  onPlay: () => void;
+}) {
+  const currentStage = selected ? 3 : playing ? 2 : 1;
+  const steps = [
+    { label: 'Pick a field', detail: 'Loaded' },
+    { label: 'Watch it move', detail: hasFrames ? 'Blink the frames' : 'Waiting for frames' },
+    { label: 'Open a candidate', detail: selected ? 'Dossier open' : 'Select a marker' },
+  ];
+
+  return (
+    <div className="border-b border-line bg-panel px-4 py-3 sm:px-6">
+      <div className="mx-auto flex w-full max-w-[1500px] flex-wrap items-center gap-x-5 gap-y-3">
+        <ol className="m-0 flex min-w-0 flex-1 list-none items-center gap-2 p-0" aria-label="Explorer guide">
+          {steps.map((step, index) => {
+            const stepNumber = index + 1;
+            const complete = stepNumber < currentStage;
+            const active = stepNumber === currentStage;
+            return (
+              <li key={step.label} className="flex min-w-0 items-center gap-2">
+                <div
+                  className={cn(
+                    'grid size-7 shrink-0 place-items-center border font-mono text-[12px]',
+                    active || complete ? 'border-accent bg-accent text-accent-ink' : 'border-line-2 text-haze',
+                  )}
+                  aria-hidden="true"
+                >
+                  {stepNumber}
+                </div>
+                <div className="min-w-0">
+                  <div className={cn('truncate text-[13px] font-semibold', active ? 'text-ink' : 'text-mist')}>
+                    {step.label}
+                  </div>
+                  <div className="truncate text-[11px] text-haze">{step.detail}</div>
+                </div>
+                {index < steps.length - 1 && <ArrowRight className="mx-1 size-4 shrink-0 text-line-2" aria-hidden="true" />}
+              </li>
+            );
+          })}
+        </ol>
+        <Button
+          onClick={onPlay}
+          disabled={!hasFrames}
+          aria-label={playing ? 'Pause frame playback' : 'Play frames to watch for movement'}
+          className="min-h-10 shrink-0 px-4"
+        >
+          {playing ? <Pause className="size-4" aria-hidden="true" /> : <Play className="size-4" aria-hidden="true" />}
+          {playing ? 'Pause frames' : 'Watch the frames'}
+        </Button>
       </div>
     </div>
   );
@@ -414,6 +476,12 @@ function ExplorerWorkspace({ fieldId }: { fieldId: string }) {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-transparent">
+      <ExplorerFlow
+        hasFrames={orderedFrames.length > 0}
+        playing={playing}
+        selected={Boolean(selectedId)}
+        onPlay={() => setPlaying(!playing)}
+      />
       <div className="flex min-h-0 flex-1 overflow-hidden">
         <aside className="hidden w-[328px] shrink-0 flex-col border-r border-line bg-panel lg:flex">
           {queue()}
@@ -437,7 +505,6 @@ function ExplorerWorkspace({ fieldId }: { fieldId: string }) {
               view={values.view}
               sys={values.sys}
               layers={values.layers}
-              exag={values.exag}
               showFlags={showFlags}
               showGrid={showGrid}
               resetSignal={resetSignal}
@@ -446,7 +513,12 @@ function ExplorerWorkspace({ fieldId }: { fieldId: string }) {
               onSelect={(candidateId) => {
                 if (candidateId) {
                   setDrawerOpen(true);
-                  update({ sel: candidateId });
+                  update({
+                    sel: candidateId,
+                    layers: values.layers.includes('trails')
+                      ? values.layers
+                      : [...values.layers, 'trails'],
+                  });
                 } else {
                   remove(['sel']);
                 }

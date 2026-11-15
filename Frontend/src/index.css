@@ -12,87 +12,87 @@
 :root {
   color-scheme: light;
 
-  --canvas: #fafafa;
-  --panel: #ffffff;
-  --panel-2: #f0f2fc;
+  --canvas: #f3f0e8;
+  --panel: #fbfaf5;
+  --panel-2: #e6ece9;
 
-  --line: #dde2f6;
-  --line-2: #bcc5ee;
+  --line: #cbd6d4;
+  --line-2: #95aba8;
 
-  --ink: #0d0d0d;
-  --mist: #333a5c;
-  --haze: #5c6488;
+  --ink: #07111f;
+  --mist: #27404a;
+  --haze: #5a7076;
 
-  --accent: #4260e6;
-  --accent-2: #1b22a7;
-  --accent-soft: #e7ebfd;
-  --accent-soft-ink: #1b22a7;
-  --accent-ink: #ffffff;
+  --accent: #f2b84b;
+  --accent-2: #74d7d0;
+  --accent-soft: #f9e6b8;
+  --accent-soft-ink: #76500a;
+  --accent-ink: #07111f;
 
-  --violet: #1b22a7;
-  --ok: #0f766e;
-  --danger: #b42318;
+  --violet: #596fa8;
+  --ok: #267d79;
+  --danger: #b64d3c;
 
-  --sky: #0b1220;
-  --sky-line: #34405c;
-  --sky-line-2: #52617d;
+  --sky: #07111f;
+  --sky-line: #2b4557;
+  --sky-line-2: #496679;
 
   --chart-bg: var(--panel);
   --chart-grid: var(--line);
   --chart-axis: var(--line-2);
   --chart-text: var(--haze);
-  --chart-detected: #4260e6;
-  --chart-limit: #b45309;
-  --chart-masked: #94a3b8;
-  --chart-1: #4260e6;
-  --chart-2: #0f766e;
-  --chart-3: #1b22a7;
-  --chart-4: #b45309;
-  --chart-5: #2563eb;
-  --chart-6: #be185d;
+  --chart-detected: #267d79;
+  --chart-limit: #b64d3c;
+  --chart-masked: #82969a;
+  --chart-1: #267d79;
+  --chart-2: #596fa8;
+  --chart-3: #d18d21;
+  --chart-4: #b64d3c;
+  --chart-5: #3d8f9a;
+  --chart-6: #7d5b9d;
 }
 
 .dark {
   color-scheme: dark;
 
-  --canvas: #0d0d0d;
-  --panel: rgb(17 18 28 / 0.74);
-  --panel-2: rgb(28 31 49 / 0.78);
+  --canvas: #07111f;
+  --panel: rgb(13 29 50 / 0.88);
+  --panel-2: rgb(20 40 66 / 0.9);
 
-  --line: rgb(185 194 240 / 0.16);
-  --line-2: rgb(185 194 240 / 0.42);
+  --line: rgb(180 211 216 / 0.18);
+  --line-2: rgb(180 211 216 / 0.42);
 
-  --ink: #fafafa;
-  --mist: #d9dcef;
-  --haze: #b9c2f0;
+  --ink: #f3f0e8;
+  --mist: #c9dadc;
+  --haze: #9cb2b7;
 
-  --accent: #4260e6;
-  --accent-2: #1b22a7;
-  --accent-soft: rgb(66 96 230 / 0.18);
-  --accent-soft-ink: #c7cffb;
-  --accent-ink: #fafafa;
+  --accent: #f2b84b;
+  --accent-2: #74d7d0;
+  --accent-soft: rgb(242 184 75 / 0.18);
+  --accent-soft-ink: #f5d795;
+  --accent-ink: #07111f;
 
-  --violet: #9aa6ff;
-  --ok: #5ee0c0;
-  --danger: #ff9db1;
+  --violet: #aebcf1;
+  --ok: #74d7d0;
+  --danger: #e77a62;
 
-  --sky: #080b14;
-  --sky-line: #34405c;
-  --sky-line-2: #52617d;
+  --sky: #050c16;
+  --sky-line: #2b4557;
+  --sky-line-2: #496679;
 
   --chart-bg: #101018;
   --chart-grid: var(--line);
   --chart-axis: var(--line-2);
   --chart-text: var(--haze);
-  --chart-detected: #7c93ff;
-  --chart-limit: #f5b942;
-  --chart-masked: #7b83a8;
-  --chart-1: #7c93ff;
-  --chart-2: #5ee0c0;
-  --chart-3: #9aa6ff;
-  --chart-4: #f5b942;
-  --chart-5: #8ea2ff;
-  --chart-6: #ff9db1;
+  --chart-detected: #74d7d0;
+  --chart-limit: #f2b84b;
+  --chart-masked: #6f8892;
+  --chart-1: #74d7d0;
+  --chart-2: #aebcf1;
+  --chart-3: #f2b84b;
+  --chart-4: #e77a62;
+  --chart-5: #76b9d0;
+  --chart-6: #d5a6ed;
 }
 
 @theme inline {
@@ -177,18 +177,11 @@ pre {
 .cosmic-canvas {
   position: relative;
   isolation: isolate;
-  background:
-    radial-gradient(55% 60% at 82% 8%, rgb(66 96 230 / 0.12), transparent 70%),
-    radial-gradient(45% 55% at 8% 92%, rgb(27 34 167 / 0.08), transparent 75%),
-    var(--canvas);
+  background: var(--canvas);
 }
 
 .dark .cosmic-canvas {
-  background:
-    radial-gradient(55% 60% at 78% 12%, rgb(27 34 167 / 0.55), transparent 70%),
-    linear-gradient(115deg, transparent 38%, rgb(66 96 230 / 0.1) 46%, transparent 54%),
-    radial-gradient(45% 55% at 12% 88%, rgb(66 96 230 / 0.22), transparent 75%),
-    var(--canvas);
+  background: var(--canvas);
 }
 
 .cosmic-canvas::before {
@@ -208,7 +201,6 @@ pre {
 }
 
 .cosmic-canvas h1 {
-  text-transform: uppercase;
   letter-spacing: -0.04em;
   line-height: 0.95;
   font-weight: 700;
@@ -222,11 +214,50 @@ pre {
 
 .app-kicker {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--haze);
+}
+
+.field-preview-fallback {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 23% 32%, rgb(242 184 75 / 0.92) 0 1px, transparent 2px),
+    radial-gradient(circle at 71% 24%, rgb(116 215 208 / 0.85) 0 1px, transparent 2px),
+    radial-gradient(circle at 63% 72%, rgb(243 240 232 / 0.8) 0 1px, transparent 2px),
+    radial-gradient(circle at 38% 78%, rgb(116 215 208 / 0.65) 0 0.8px, transparent 1.7px),
+    linear-gradient(135deg, #0b1b2c, #07111f 56%, #142f42);
+  background-size: auto, auto, auto, auto, 100% 100%;
+}
+
+.field-preview-fallback::after {
+  position: absolute;
+  inset: 18% 14%;
+  content: '';
+  border: 1px solid rgb(116 215 208 / 0.3);
+  transform: rotate(-14deg);
+}
+
+.field-preview-crosshair,
+.field-preview-crosshair::before {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgb(242 184 75 / 0.65);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.field-preview-crosshair::before {
+  inset: 50% auto auto 50%;
+  width: 44px;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid rgb(242 184 75 / 0.4);
+  border-radius: 0;
 }
 
 .app-panel {
@@ -442,3 +473,18 @@ pre {
 }
 
 @keyframes landing-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Keep utility labels readable without making the data canvas feel loud. */
+.cosmic-canvas .text-\[10px\] { font-size: 0.6875rem; }
+.cosmic-canvas .text-\[11px\] { font-size: 0.75rem; }

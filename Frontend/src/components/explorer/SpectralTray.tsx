@@ -75,7 +75,7 @@ export function SpectralTray({
           ) : (
             <ChevronDown className="size-3.5" aria-hidden="true" />
           )}
-          <span className="text-[10px] font-semibold tracking-[0.14em] uppercase">Spectral tray</span>
+          <span className="text-[12px] font-semibold">Spectral tray</span>
         </button>
         <span className="font-mono text-[10px] text-haze">
           B001–B102 · 0.75–5.00 μm

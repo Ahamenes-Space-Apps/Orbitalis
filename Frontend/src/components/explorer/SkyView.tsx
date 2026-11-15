@@ -43,7 +43,6 @@ interface SkyViewProps {
   view: 'simple' | 'aladin';
   sys: CoordinateSystem;
   layers: LayerName[];
-  exag: number;
   showFlags: boolean;
   showGrid: boolean;
   resetSignal: number;
@@ -62,11 +61,6 @@ const STATIC_COLOR = '#9aa3b8';
 const KNOWN_COLOR = '#7b8499';
 const HYPOTHESIS_COLOR = '#6cb6ff';
 
-function frameMjd(frames: Frame[]): number | null {
-  if (frames.length === 0) return null;
-  return frames.reduce((min, item) => Math.min(min, item.mjd), Number.POSITIVE_INFINITY);
-}
-
 export function SkyView({
   field,
   frames,
@@ -77,7 +71,6 @@ export function SkyView({
   view,
   sys,
   layers,
-  exag,
   showFlags,
   showGrid,
   resetSignal,
@@ -115,8 +108,8 @@ export function SkyView({
   const width = grid.width;
   const height = grid.height;
   const scale = grid.pixel_scale_arcsec;
-  const firstMjd = frameMjd(frames);
   const currentFrame = frame ?? frames[0] ?? null;
+  const [expandedGroupId, setExpandedGroupId] = useState<string | null>(null);
 
   const toPixel = useCallback(
     (position: SkyPos): { x: number; y: number } => {
@@ -148,33 +141,37 @@ export function SkyView({
   );
 
   const markers = useMemo<SkyMarker[]>(() => {
-    if (!currentFrame || firstMjd === null) {
-      return candidates.map((candidate) => ({
-        candidate,
-        position: candidate.position,
-        selected: candidate.candidate_id === selectedId,
-        hovered: candidate.candidate_id === hoveredId,
-        staticFlag: Boolean(candidate.static_source),
-      }));
-    }
-    const dt = currentFrame.mjd - firstMjd;
     return candidates.map((candidate) => {
-      const east = candidate.motion.mu_e_arcsec_per_day * dt * exag;
-      const north = candidate.motion.mu_n_arcsec_per_day * dt * exag;
       return {
         candidate,
-        position: {
-          ra:
-            candidate.position.ra +
-            east / 3600 / Math.cos((candidate.position.dec * Math.PI) / 180),
-          dec: candidate.position.dec + north / 3600,
-        },
+        // CandidateSummary.position is the stored reference position. Motion
+        // is never projected into a new frame here; tracks use stored points.
+        position: candidate.position,
         selected: candidate.candidate_id === selectedId,
         hovered: candidate.candidate_id === hoveredId,
         staticFlag: Boolean(candidate.static_source),
       };
     });
-  }, [candidates, currentFrame, exag, firstMjd, hoveredId, selectedId]);
+  }, [candidates, hoveredId, selectedId]);
+
+  const markerGroups = useMemo(() => {
+    const groups: Array<{ id: string; markers: SkyMarker[]; x: number; y: number }> = [];
+    for (const marker of markers) {
+      const pixel = toPixel(marker.position);
+      const match = groups.find((group) => Math.hypot(group.x - pixel.x, group.y - pixel.y) <= 3.2);
+      if (match) {
+        match.markers.push(marker);
+        match.x = (match.x * (match.markers.length - 1) + pixel.x) / match.markers.length;
+        match.y = (match.y * (match.markers.length - 1) + pixel.y) / match.markers.length;
+      } else {
+        groups.push({ id: marker.candidate.candidate_id, markers: [marker], x: pixel.x, y: pixel.y });
+      }
+    }
+    return groups.map((group) => ({
+      ...group,
+      id: group.markers.map((marker) => marker.candidate.candidate_id).sort().join('|'),
+    }));
+  }, [markers, toPixel]);
 
   const selectedMarker = markers.find((marker) => marker.selected) ?? null;
 
@@ -273,9 +270,7 @@ export function SkyView({
     return { x, y, width: viewWidth, height: viewHeight };
   }, [height, pan.x, pan.y, width, zoom]);
 
-  // Keep markers and trails inside the field image, even with motion
-  // exaggeration on: an exaggerated position pins to the edge instead of
-  // floating over empty space beyond the data.
+  // Keep markers and stored tracks inside the field image.
   const clampPixel = useCallback(
     (point: { x: number; y: number }, margin: number) => ({
       x: Math.min(width - margin, Math.max(margin, point.x)),
@@ -422,9 +417,6 @@ export function SkyView({
           }}
         >
           <defs>
-            <marker id="trail-arrow" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto">
-              <path d="M0,0 L6,3 L0,6 z" fill={CANDIDATE_COLOR} />
-            </marker>
             <clipPath id="field-clip">
               <rect x="0" y="0" width={width} height={height} />
             </clipPath>
@@ -529,30 +521,6 @@ export function SkyView({
               );
             })}
 
-          {layers.includes('trails') &&
-            firstMjd !== null &&
-            currentFrame &&
-            markers.map((marker) => {
-              if (marker.staticFlag) return null;
-              if (marker.selected && trackPixels.length > 0) return null;
-              const start = clampPixel(toPixel(marker.candidate.position), 0.2);
-              const end = clampPixel(toPixel(marker.position), 0.2);
-              if (Math.hypot(end.x - start.x, end.y - start.y) < 0.2) return null;
-              return (
-                <line
-                  key={`trail-${marker.candidate.candidate_id}`}
-                  x1={start.x}
-                  y1={start.y}
-                  x2={end.x}
-                  y2={end.y}
-                  stroke={CANDIDATE_COLOR}
-                  strokeOpacity="0.42"
-                  strokeWidth="0.14"
-                  markerEnd="url(#trail-arrow)"
-                />
-              );
-            })}
-
           {layers.includes('trails') && trackPixels.length > 0 && selectedMarker && (
             <g aria-hidden="true">
               {trackPath && (
@@ -582,72 +550,111 @@ export function SkyView({
             </g>
           )}
 
-          {markers.map((marker) => {
-            const visible = marker.staticFlag ? layers.includes('static') : layers.includes('moving');
-            if (!visible) return null;
-            const color = marker.staticFlag ? STATIC_COLOR : CANDIDATE_COLOR;
-            const half = marker.selected ? 1.9 : marker.hovered ? 1.7 : 1.45;
-            const pixel = clampPixel(toPixel(marker.position), half + 0.1);
-            return (
-              <g
-                key={marker.candidate.candidate_id}
-                className="cursor-pointer"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onSelect(marker.candidate.candidate_id);
-                }}
-                onMouseEnter={() => onHover(marker.candidate.candidate_id)}
-                onMouseLeave={() => onHover(null)}
-                role="button"
-                aria-label={`${marker.candidate.ordinal ? `#${marker.candidate.ordinal}` : 'Candidate'}, unconfirmed`}
-                tabIndex={0}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    onSelect(marker.candidate.candidate_id);
-                  }
-                }}
-              >
-                {marker.selected && (
-                  <rect
-                    x={pixel.x - half * 2.2}
-                    y={pixel.y - half * 2.2}
-                    width={half * 4.4}
-                    height={half * 4.4}
-                    rx={0.9}
-                    fill={CANDIDATE_COLOR}
-                    opacity="0.13"
-                  />
-                )}
-                <rect
-                  x={pixel.x - half}
-                  y={pixel.y - half}
-                  width={half * 2}
-                  height={half * 2}
-                  fill="none"
-                  stroke={color}
-                  strokeWidth={marker.selected ? 0.24 : 0.17}
-                  strokeDasharray={marker.staticFlag ? '0.45 0.3' : undefined}
-                />
-                <text
-                  x={pixel.x + half + 0.4}
-                  y={pixel.y + 0.35}
-                  fill={color}
-                  fontSize="1.05"
-                  fontFamily="'IBM Plex Mono', monospace"
-                  paintOrder="stroke"
-                  stroke="#0b1220"
-                  strokeWidth="0.22"
-                >
-                  {marker.candidate.ordinal ? `#${String(marker.candidate.ordinal).padStart(3, '0')}` : '#'}
-                </text>
-                <title>
-                  {`${marker.candidate.ordinal ? `#${marker.candidate.ordinal}` : 'Candidate'} · ${
-                    marker.staticFlag ? 'static-source flag' : 'moving'
-                  } · stack SNR ${marker.candidate.stack_snr.toFixed(1)} · unconfirmed`}
-                </title>
-              </g>
+          {markerGroups.map((group) => {
+            const visibleMarkers = group.markers.filter((marker) =>
+              marker.staticFlag ? layers.includes('static') : layers.includes('moving'),
             );
+            if (visibleMarkers.length === 0) return null;
+            const expanded = group.markers.length === 1 || expandedGroupId === group.id;
+            if (!expanded) {
+              return (
+                <g
+                  key={group.id}
+                  className="cursor-pointer"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${visibleMarkers.length} overlapping unconfirmed candidates. Expand markers.`}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setExpandedGroupId(group.id);
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      setExpandedGroupId(group.id);
+                    }
+                  }}
+                >
+                  <circle cx={group.x} cy={group.y} r="3.2" fill={CANDIDATE_COLOR} fillOpacity="0.18" stroke={CANDIDATE_COLOR} strokeWidth="0.22" />
+                  <text x={group.x} y={group.y + 1.2} textAnchor="middle" fill={CANDIDATE_COLOR} fontSize="2.4" fontWeight="700">
+                    {visibleMarkers.length}
+                  </text>
+                  <title>{`${visibleMarkers.length} overlapping unconfirmed candidates · click to expand`}</title>
+                </g>
+              );
+            }
+            return visibleMarkers.map((marker, index) => {
+              const color = marker.staticFlag ? STATIC_COLOR : CANDIDATE_COLOR;
+              const half = marker.selected ? 1.9 : marker.hovered ? 1.7 : 1.45;
+              const pixel = clampPixel(toPixel(marker.position), half + 0.1);
+              const offset = group.markers.length > 1
+                ? { x: (index - (visibleMarkers.length - 1) / 2) * 4, y: -((index % 2) * 3) }
+                : { x: 0, y: 0 };
+              const displayX = pixel.x + offset.x;
+              const displayY = pixel.y + offset.y;
+              return (
+                <g
+                  key={marker.candidate.candidate_id}
+                  className="cursor-pointer"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setExpandedGroupId(null);
+                    onSelect(marker.candidate.candidate_id);
+                  }}
+                  onMouseEnter={() => onHover(marker.candidate.candidate_id)}
+                  onMouseLeave={() => onHover(null)}
+                  role="button"
+                  aria-label={`${marker.candidate.ordinal ? `#${marker.candidate.ordinal}` : 'Candidate'}, unconfirmed`}
+                  tabIndex={0}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      setExpandedGroupId(null);
+                      onSelect(marker.candidate.candidate_id);
+                    }
+                  }}
+                >
+                  {marker.selected && (
+                    <rect
+                      x={displayX - half * 2.2}
+                      y={displayY - half * 2.2}
+                      width={half * 4.4}
+                      height={half * 4.4}
+                      rx={0.9}
+                      fill={CANDIDATE_COLOR}
+                      opacity="0.13"
+                    />
+                  )}
+                  <rect
+                    x={displayX - half}
+                    y={displayY - half}
+                    width={half * 2}
+                    height={half * 2}
+                    fill="none"
+                    stroke={color}
+                    strokeWidth={marker.selected ? 0.24 : 0.17}
+                    strokeDasharray={marker.staticFlag ? '0.45 0.3' : undefined}
+                  />
+                  <text
+                    x={displayX + half + 0.4}
+                    y={displayY + 0.35}
+                    fill={color}
+                    fontSize="1.05"
+                    fontFamily="'JetBrains Mono Variable', monospace"
+                    paintOrder="stroke"
+                    stroke="#07111f"
+                    strokeWidth="0.22"
+                  >
+                    {marker.candidate.ordinal ? `#${String(marker.candidate.ordinal).padStart(3, '0')}` : '#'}
+                  </text>
+                  <title>
+                    {`${marker.candidate.ordinal ? `#${marker.candidate.ordinal}` : 'Candidate'} · ${
+                      marker.staticFlag ? 'static-source flag' : 'moving'
+                    } · stack SNR ${marker.candidate.stack_snr.toFixed(1)} · unconfirmed`}
+                  </title>
+                </g>
+              );
+            });
           })}
 
           {raTicks.map((tick, index) => (
@@ -716,17 +723,26 @@ export function SkyView({
                 fillOpacity="0.85"
               />
             ))}
-            {markers.map((marker) => {
-              const pixel = toPixel(marker.position);
+            {markerGroups.map((group) => {
+              const visibleMarkers = group.markers.filter((marker) =>
+                marker.staticFlag ? layers.includes('static') : layers.includes('moving'),
+              );
+              if (visibleMarkers.length === 0) return null;
               return (
-                <circle
-                  key={`inset-${marker.candidate.candidate_id}`}
-                  cx={pixel.x}
-                  cy={pixel.y}
-                  r={marker.selected ? 2 : 1.1}
-                  fill={marker.staticFlag ? STATIC_COLOR : CANDIDATE_COLOR}
-                  fillOpacity={marker.selected ? 1 : 0.7}
-                />
+                <g key={`inset-${group.id}`}>
+                  <circle
+                    cx={group.x}
+                    cy={group.y}
+                    r={visibleMarkers.length > 1 ? 2.4 : visibleMarkers[0].selected ? 2 : 1.1}
+                    fill={visibleMarkers[0].staticFlag ? STATIC_COLOR : CANDIDATE_COLOR}
+                    fillOpacity={visibleMarkers[0].selected ? 1 : 0.7}
+                  />
+                  {visibleMarkers.length > 1 && (
+                    <text x={group.x} y={group.y + 0.8} textAnchor="middle" fill={CANDIDATE_COLOR} fontSize="1.8">
+                      {visibleMarkers.length}
+                    </text>
+                  )}
+                </g>
               );
             })}
             <rect
@@ -739,7 +755,7 @@ export function SkyView({
               strokeWidth="0.8"
             />
           </svg>
-          <span className="w-[124px] text-center font-mono text-[9px] tracking-wider text-star/60 uppercase">
+          <span className="w-[124px] text-center font-mono text-[10px] text-star/60">
             Patch context · click to recenter
           </span>
         </div>

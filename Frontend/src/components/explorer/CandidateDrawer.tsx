@@ -124,6 +124,8 @@ export interface CandidateDrawerProps {
   hideHeader?: boolean;
   /** The dossier page shows coverage as a read-only record. */
   readOnlyWavelength?: boolean;
+  /** The dossier page places the plain-language summary above this content. */
+  hideSummary?: boolean;
   className?: string;
 }
 
@@ -142,6 +144,7 @@ export function CandidateDrawer({
   onSelectOnMap,
   hideHeader = false,
   readOnlyWavelength = false,
+  hideSummary = false,
   className,
 }: CandidateDrawerProps) {
   const detail = useCandidate(candidateId);
@@ -314,7 +317,30 @@ export function CandidateDrawer({
 
         {candidate && (
           <>
-            <section className="flex flex-col gap-2" aria-labelledby="stack-heading">
+            {!hideSummary && <section className="order-1 border-l-2 border-accent bg-accent-soft/60 px-3 py-3" aria-labelledby="summary-heading">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 id="summary-heading" className="m-0 text-[15px] font-semibold text-ink">
+                  What we see
+                </h3>
+                <Badge tone="amber">Unconfirmed</Badge>
+              </div>
+              <p className="m-0 mt-2 text-[13px] leading-relaxed text-mist">
+                {candidate.static_source
+                  ? `This candidate is marked as a static-source flag. Its stored positions cover ${metrics?.baseline.toFixed(1) ?? '—'} days.`
+                  : `Candidate ${formatId(candidate.ordinal)} moved ${formatArcsec(metrics?.shiftArcsec ?? 0)} over ${metrics?.baseline.toFixed(1) ?? '—'} days across ${frames.length} stored frames.`}{' '}
+                Compare the original frames before any follow-up claim.
+              </p>
+              {!hideHeader && (
+                <Button asChild className="mt-3 min-h-9 px-3 text-[12px]">
+                  <Link to={`/candidates/${encodeURIComponent(candidateId)}?f=${encodeURIComponent(field.field_id)}`}>
+                    Open full dossier
+                    <FileText className="size-3.5" aria-hidden="true" />
+                  </Link>
+                </Button>
+              )}
+            </section>}
+
+            <section className="order-4 flex flex-col gap-2" aria-labelledby="stack-heading">
               <SectionTitle id="stack-heading" aside={`${frames.length} frame${frames.length === 1 ? '' : 's'}`}>
                 Stack versus originals
               </SectionTitle>
@@ -433,7 +459,7 @@ export function CandidateDrawer({
               )}
             </section>
 
-            <section className="flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="motion-heading">
+            <section className="order-5 flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="motion-heading">
               <SectionTitle id="motion-heading">Motion</SectionTitle>
               <dl className="m-0 grid grid-cols-2 gap-x-4 gap-y-2 text-[11px]">
                 <div>
@@ -464,7 +490,7 @@ export function CandidateDrawer({
               </p>
             </section>
 
-            <section className="flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="triage-heading">
+            <section className="order-6 flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="triage-heading">
               <div className="flex items-center gap-1.5">
                 <Sparkles className="size-3.5 text-accent" aria-hidden="true" />
                 <h3 id="triage-heading" className="m-0 text-[12px] font-semibold tracking-[0.02em]">
@@ -499,7 +525,7 @@ export function CandidateDrawer({
               </p>
             </section>
 
-            <section className="flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="scores-heading">
+            <section className="order-7 flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="scores-heading">
               <SectionTitle id="scores-heading">Scores</SectionTitle>
               <dl className="m-0 grid grid-cols-2 gap-x-4 gap-y-2 text-[11px]">
                 <div>
@@ -522,7 +548,7 @@ export function CandidateDrawer({
               </dl>
             </section>
 
-            <section className="flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="lightcurve-heading">
+            <section className="order-2 flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="lightcurve-heading">
               <SectionTitle id="lightcurve-heading" aside="quick-look · not calibrated">
                 Light curve
               </SectionTitle>
@@ -541,7 +567,7 @@ export function CandidateDrawer({
               )}
             </section>
 
-            <section className="flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="spectrum-heading">
+            <section className="order-3 flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="spectrum-heading">
               <div className="flex items-center justify-between gap-2">
                 <SectionTitle id="spectrum-heading" aside="SPHEREx 0.75–5.0 µm">
                   Spectrum
@@ -599,7 +625,7 @@ export function CandidateDrawer({
                     />
                   )}
                   <div className="mt-1 border-t border-line pt-2">
-                    <h4 className="m-0 mb-1 text-[10px] font-semibold tracking-[0.12em] text-haze uppercase">
+                    <h4 className="m-0 mb-1 text-[12px] font-semibold text-haze">
                       Wavelength coverage
                     </h4>
                     <WavelengthCoverage
@@ -614,7 +640,7 @@ export function CandidateDrawer({
               )}
             </section>
 
-            <section className="flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="provenance-heading">
+            <section className="order-8 flex flex-col gap-2 border-t border-line pt-4" aria-labelledby="provenance-heading">
               <div className="flex items-center justify-between gap-2">
                 <h3 id="provenance-heading" className="m-0 text-[12px] font-semibold tracking-[0.02em]">
                   Provenance
@@ -672,7 +698,7 @@ export function CandidateDrawer({
               </div>
             </section>
 
-            <p className="m-0 flex items-start gap-1.5 text-[10px] leading-snug text-haze">
+            <p className="order-9 m-0 flex items-start gap-1.5 text-[10px] leading-snug text-haze">
               <MousePointer2 className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
               Originals are always kept beside the stack. Whether the source visibly moves is the
               evidence; this screen does not decide it for you.

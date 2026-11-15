@@ -221,17 +221,6 @@ export function DossierPage() {
               ranked by {candidate.rank_value.basis === 'model_score' ? 'model score' : 'stack SNR'}
             </div>
           </div>
-          <div data-html2canvas-ignore className="flex flex-col items-end gap-1.5">
-            <Button variant="outline" onClick={() => void exportReport()} disabled={exporting}>
-              <Download className="size-4" aria-hidden="true" />
-              {exporting ? 'Exporting…' : 'Export report'}
-            </Button>
-            {exportError && (
-              <p role="alert" className="m-0 text-[11px] text-danger">
-                Export failed. Try again.
-              </p>
-            )}
-          </div>
         </div>
       </section>
 
@@ -243,6 +232,19 @@ export function DossierPage() {
           detection. Independent follow-up observations are needed before any claim is made.
         </p>
       </div>
+
+      <section className="border-l-2 border-accent bg-accent-soft/60 px-4 py-4" aria-labelledby="plain-summary-heading">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 id="plain-summary-heading" className="m-0 text-[17px] font-semibold">What we see</h2>
+          <Badge tone="amber">Unconfirmed</Badge>
+        </div>
+        <p className="m-0 mt-2 max-w-[72ch] text-[14px] leading-relaxed text-mist">
+          {moving
+            ? `Candidate ${formatId(candidate.ordinal)} moved ${formatArcsec(metrics.shiftArcsec)} over ${metrics.baseline.toFixed(1)} days across ${frameCount} stored frames.`
+            : `Candidate ${formatId(candidate.ordinal)} is marked as a static-source flag across ${metrics.baseline.toFixed(1)} days of stored positions.`}{' '}
+          Compare the original frames before any follow-up claim.
+        </p>
+      </section>
 
       <section className="flex flex-wrap gap-4" aria-label="Key numbers">
         <Stat
@@ -283,6 +285,7 @@ export function DossierPage() {
         field={fieldData}
         variant="pane"
         hideHeader
+        hideSummary
         readOnlyWavelength
         className="w-full border border-line bg-panel"
       />
@@ -300,6 +303,26 @@ export function DossierPage() {
               : ''}{' '}
             Flux and SED values are quick-look, not calibrated. Candidates are unconfirmed.
           </p>
+        </div>
+      </section>
+
+      <section data-html2canvas-ignore className="flex flex-wrap items-center justify-between gap-4 border border-accent/50 bg-accent-soft/50 px-4 py-4">
+        <div>
+          <h2 className="m-0 text-[15px] font-semibold">Ready to share?</h2>
+          <p className="m-0 mt-1 text-[13px] leading-relaxed text-mist">
+            Export this candidate dossier with the stored images and measurements.
+          </p>
+        </div>
+        <div className="flex flex-col items-end gap-1.5">
+          <Button onClick={() => void exportReport()} disabled={exporting}>
+            <Download className="size-4" aria-hidden="true" />
+            {exporting ? 'Exporting…' : 'Export report'}
+          </Button>
+          {exportError && (
+            <p role="alert" className="m-0 text-[11px] text-danger">
+              Export failed. Try again.
+            </p>
+          )}
         </div>
       </section>
     </div>
