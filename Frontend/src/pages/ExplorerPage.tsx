@@ -15,7 +15,7 @@ import {
   useOverlays,
   useSpectrum,
 } from '@/data/hooks';
-import type { Overlay } from '@/data/types';
+import type { CandidateSummary, Overlay } from '@/data/types';
 import { formatDec, formatMjdDate, formatRa, formatRelease, formatWavelength } from '@/lib/format';
 import type { SkyPos } from '@/lib/coords';
 import type { WavelengthRange } from '@/lib/wavelength';
@@ -175,14 +175,48 @@ function SkyPointPanel({
   );
 }
 
-function downloadJson(filename: string, payload: unknown) {
-  const blob = new Blob([JSON.stringify(payload, null, 2)], {
-    type: 'application/json;charset=utf-8',
+function csvCell(value: string | number | null | undefined): string {
+  const text = value === null || value === undefined ? '' : String(value);
+  return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+}
+
+function downloadDossierCsv(candidates: CandidateSummary[], fieldId: string) {
+  const header = [
+    'candidate_id',
+    'ordinal',
+    'status',
+    'ra_deg',
+    'dec_deg',
+    'rate_arcsec_per_day',
+    'position_angle_deg',
+    'stack_snr',
+    'model_score',
+  ];
+  const rows = candidates.map((candidate) => {
+    const rate = Math.hypot(candidate.motion.mu_e_arcsec_per_day, candidate.motion.mu_n_arcsec_per_day);
+    const angle =
+      ((Math.atan2(candidate.motion.mu_e_arcsec_per_day, candidate.motion.mu_n_arcsec_per_day) * 180) /
+        Math.PI +
+        360) %
+      360;
+    return [
+      candidate.candidate_id,
+      candidate.ordinal ?? '',
+      candidate.status,
+      candidate.position.ra.toFixed(6),
+      candidate.position.dec.toFixed(6),
+      rate.toFixed(3),
+      angle.toFixed(1),
+      candidate.stack_snr.toFixed(2),
+      candidate.model_score?.value.toFixed(4) ?? '',
+    ];
   });
+  const csv = [header, ...rows].map((row) => row.map(csvCell).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = filename;
+  anchor.download = `orbitalis-${fieldId}-dossier.csv`;
   anchor.click();
   URL.revokeObjectURL(url);
 }
@@ -349,16 +383,7 @@ function ExplorerWorkspace({ fieldId }: { fieldId: string }) {
   }
 
   const exportDossier = () => {
-    const selectedCandidate =
-      candidates.find((candidate) => candidate.candidate_id === selectedId) ?? candidates[0] ?? null;
-    downloadJson(`orbitalis-${field.field_id}-dossier.json`, {
-      generated_at: new Date().toISOString(),
-      note: 'Candidates are unconfirmed. Independent follow-up is required.',
-      field,
-      frames: orderedFrames,
-      candidate: selectedCandidate,
-      candidates,
-    });
+    downloadDossierCsv(candidates, field.field_id);
   };
 
   const queue = (onClose?: () => void) => (

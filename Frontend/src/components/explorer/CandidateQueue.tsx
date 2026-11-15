@@ -371,7 +371,7 @@ export function CandidateQueue({
           disabled={!canExport}
         >
           <Download className="size-3.5" aria-hidden="true" />
-          Export Candidate Dossier JSON
+          Export Candidate Dossier CSV
         </Button>
       </footer>
     </section>
