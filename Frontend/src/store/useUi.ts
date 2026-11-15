@@ -12,11 +12,11 @@ export type Theme = 'dark' | 'light';
 const THEME_KEY = 'orbitalis-theme';
 
 export function readStoredTheme(): Theme {
-  if (typeof window === 'undefined') return 'dark';
+  if (typeof window === 'undefined') return 'light';
   try {
-    return window.localStorage.getItem(THEME_KEY) === 'light' ? 'light' : 'dark';
+    return window.localStorage.getItem(THEME_KEY) === 'dark' ? 'dark' : 'light';
   } catch {
-    return 'dark';
+    return 'light';
   }
 }
 
